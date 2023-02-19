@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 @RestController
 @RequestMapping("/")
@@ -32,4 +35,9 @@ class BaseController {
         return "Async operation complete after 2 seconds!"
     }
 
+    @GetMapping("/tyler")
+    fun tyler(): String {
+        val local = LocalDateTime.now();
+        return "The current timestamp is: $local"
+    }
 }
