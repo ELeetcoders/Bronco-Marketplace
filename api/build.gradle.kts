@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	implementation("org.apache.commons:commons-lang3:3.0")
 }
 
 tasks.withType<KotlinCompile> {

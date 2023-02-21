@@ -1,13 +1,16 @@
 package com.eleetcoders.api
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import org.apache.tomcat.util.codec.binary.Base64
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 @RestController
 @RequestMapping("/")
@@ -39,5 +42,19 @@ class BaseController {
     fun tyler(): String {
         val local = LocalDateTime.now();
         return "The current timestamp is: $local"
+    }
+
+    @GetMapping("/encryption")
+    fun encryption(@RequestParam(value = "input", defaultValue = "hello world") input: String): String {
+        val secretKey1 = "ssdkF\$HUy2A#D%kd"
+        val secretKey2 = "weJiSEvR5yAC5ftB"
+
+        val ivParameterSpec = IvParameterSpec(secretKey1.toByteArray())
+        val secretKeySpec = SecretKeySpec(secretKey2.toByteArray(), "AES")
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
+        val encrypted: ByteArray = cipher.doFinal(input.toByteArray())
+        return Base64.encodeBase64String(encrypted)
     }
 }
