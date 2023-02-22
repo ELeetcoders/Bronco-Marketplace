@@ -57,4 +57,9 @@ class BaseController {
         val encrypted: ByteArray = cipher.doFinal(input.toByteArray())
         return Base64.encodeBase64String(encrypted)
     }
+
+    @GetMapping("/uziel")
+    fun uziel(): String {
+        return "This sentence is kinda interesting"
+    }
 }
