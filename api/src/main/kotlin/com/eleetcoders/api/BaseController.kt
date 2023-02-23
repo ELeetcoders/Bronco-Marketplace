@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import org.jsoup.Jsoup
 
 @RestController
 @RequestMapping("/")
@@ -61,5 +62,11 @@ class BaseController {
     @GetMapping("/uziel")
     fun uziel(): String {
         return "This sentence is kinda interesting"
+    }
+
+    @GetMapping("/parsing")
+    fun parsing(): String? {
+        val doc = Jsoup.connect("http://cs480-projects.github.io/teams-spring2023/index.html").get()
+        return doc.appendText("This was all parsed with JSoup").html()
     }
 }
