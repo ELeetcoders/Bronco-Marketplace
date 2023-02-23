@@ -25,6 +25,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	implementation("org.apache.commons:commons-lang3:3.0")
+	implementation("org.jsoup:jsoup:1.15.4")
+
+	implementation("com.google.firebase:firebase-admin:9.1.1")
 }
 
 tasks.withType<KotlinCompile> {
