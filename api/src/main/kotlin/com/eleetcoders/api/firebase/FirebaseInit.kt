@@ -7,13 +7,16 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.cloud.FirestoreClient
 import org.springframework.stereotype.Service
 import java.io.FileInputStream
+import javax.annotation.PostConstruct
 
 
 @Service
 class FirebaseInit {
+
+    @PostConstruct
     fun initialization() {
 
-        val serviceAccount = FileInputStream("path/to/serviceAccountKey.json")
+        val serviceAccount = FileInputStream("./api/serviceAccountKey.json")
 
         val options: FirebaseOptions = FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))

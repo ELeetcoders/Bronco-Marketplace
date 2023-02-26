@@ -1,4 +1,4 @@
-package com.eleetcoders.api
+package com.eleetcoders.api.controllers
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -12,6 +12,10 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import org.jsoup.Jsoup
+import org.springframework.beans.factory.annotation.Autowired
+import com.eleetcoders.api.services.ProductService
+import com.google.cloud.firestore.Firestore
+import com.google.firebase.cloud.FirestoreClient
 
 @RestController
 @RequestMapping("/")
@@ -69,4 +73,15 @@ class BaseController {
         val doc = Jsoup.connect("http://cs480-projects.github.io/teams-spring2023/index.html").get()
         return doc.appendText("This was all parsed with JSoup").html()
     }
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -1,4 +1,5 @@
 HELP.md
+serviceAccountKey.json
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
