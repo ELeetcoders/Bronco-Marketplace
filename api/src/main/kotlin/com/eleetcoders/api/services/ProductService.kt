@@ -1,4 +1,5 @@
 package com.eleetcoders.api.services
+import com.eleetcoders.api.Product
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.api.core.ApiFuture
@@ -35,7 +36,7 @@ class ProductService @Autowired constructor(){
 
     fun postProduct(): String {
         val db: Firestore = FirestoreClient.getFirestore()
-        val docRef = db.collection("test").document("mytestdoc")
+        val docRef = db.collection("test").document("mytestdoc5")
         val data: MutableMap<String, Any> = HashMap()
         data["field1"] = "12345"
         data["field2"] = "1234"
@@ -44,6 +45,26 @@ class ProductService @Autowired constructor(){
 
         return "Update time : " + result.get().updateTime
     }
+
+    fun findProduct(id: String): String {
+        val db: Firestore = FirestoreClient.getFirestore()
+        val querySnapshot = db.collection("test").document(id).get().get().data
+
+        return querySnapshot.toString()
+    }
+
+    fun deleteProduct(id: String) : Boolean {
+        val db: Firestore = FirestoreClient.getFirestore()
+        db.collection("test").document(id).delete()
+        return true
+    }
+
+    fun updateProduct(id: String) : Boolean {
+        val db: Firestore = FirestoreClient.getFirestore()
+        db.collection("test").document(id).update("hello", "not world")
+        return true
+    }
+
 
 
 }
