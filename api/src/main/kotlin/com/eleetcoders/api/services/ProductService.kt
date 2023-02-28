@@ -65,6 +65,17 @@ class ProductService @Autowired constructor(){
         return true
     }
 
+    fun filterByPrice(max: Double) : String? {
+        val db = FirestoreClient.getFirestore()
+        val docRef = db.collection("productDemo").get().get().documents
+        val data = ArrayList<Map<String, Any>>()
+        for (document in docRef) {
+            if (document.data["price"].toString().toDouble() <= max) // Price will always be numeric
+                data.add(document.data)
+        }
+        return data.toString()
+    }
+
 
 
 }

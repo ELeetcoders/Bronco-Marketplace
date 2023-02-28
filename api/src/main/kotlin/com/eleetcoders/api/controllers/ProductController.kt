@@ -40,4 +40,10 @@ class ProductController @Autowired constructor(
     fun updateProduct(@RequestBody id: String) : Boolean {
         return productService.updateProduct(id)
     }
+
+    @GetMapping("filter-price")
+    fun filterByPrice(@RequestBody max: String) : String? {
+        val price = max.toDouble()
+        return productService.filterByPrice(price)
+    }
 }
