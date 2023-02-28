@@ -85,11 +85,7 @@ class ProductService @Autowired constructor(){
             if (document.data["name"].toString().contains(term))
                 data.add(document.data)
         }
-        val objectMapper = ObjectMapper().registerModule(KotlinModule())
-        return objectMapper.writeValueAsString(data)
-        //return data.toString()
+
+        return Gson().toJson(data)
     }
-
-
-
 }
