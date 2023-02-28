@@ -76,6 +76,17 @@ class ProductService @Autowired constructor(){
         return data.toString()
     }
 
+    fun searchByTerm(term: String): String? {
+        val db = FirestoreClient.getFirestore()
+        val docRef = db.collection("productDemo").get().get().documents
+        val data = ArrayList<Map<String, Any>>()
+        for (document in docRef) {
+            if (document.data["name"].toString().contains(term))
+                data.add(document.data)
+        }
+        return data.toString()
+    }
+
 
 
 }

@@ -36,14 +36,19 @@ class ProductController @Autowired constructor(
         return productService.deleteProduct(id)
     }
 
-    @PostMapping("update-product")
+    @PostMapping("/update-product")
     fun updateProduct(@RequestBody id: String) : Boolean {
         return productService.updateProduct(id)
     }
 
-    @GetMapping("filter-price")
+    @GetMapping("/filter-price")
     fun filterByPrice(@RequestBody max: String) : String? {
         val price = max.toDouble()
         return productService.filterByPrice(price)
+    }
+
+    @GetMapping("/search")
+    fun searchProduct(@RequestBody term: String) : String? {
+        return productService.searchByTerm(term)
     }
 }
