@@ -5,6 +5,7 @@ import com.google.api.core.ApiFuture
 import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.WriteResult
 import com.google.firebase.cloud.FirestoreClient
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -30,8 +31,8 @@ class ProductService @Autowired constructor(){
         for (document in querySnapshot.documents) {
             products.add(document.data)
         }
-        val objectMapper = ObjectMapper().registerModule(KotlinModule())
-        return objectMapper.writeValueAsString(products)
+        val gson = Gson()
+        return gson.toJson(products)
     }
 
     fun postProduct(): String {

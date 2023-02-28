@@ -26,6 +26,7 @@ dependencies {
 
 	implementation("org.apache.commons:commons-lang3:3.0")
 	implementation("org.jsoup:jsoup:1.15.4")
+	implementation("com.google.code.gson:gson:2.10.1")
 
 	implementation("com.google.firebase:firebase-admin:9.1.1")
 }
