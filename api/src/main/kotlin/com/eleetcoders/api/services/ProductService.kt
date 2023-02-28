@@ -1,11 +1,11 @@
 package com.eleetcoders.api.services
-import com.eleetcoders.api.Product
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.api.core.ApiFuture
 import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.WriteResult
 import com.google.firebase.cloud.FirestoreClient
+import com.google.gson.JsonObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -25,7 +25,7 @@ class ProductService @Autowired constructor(){
 
     fun getAllProducts(): String {
         val db: Firestore = FirestoreClient.getFirestore()
-        val querySnapshot = db.collection("demo").get().get()
+        val querySnapshot = db.collection("productDemo").get().get()
         val products = mutableListOf<Map<String, Any>>()
         for (document in querySnapshot.documents) {
             products.add(document.data)
@@ -84,7 +84,9 @@ class ProductService @Autowired constructor(){
             if (document.data["name"].toString().contains(term))
                 data.add(document.data)
         }
-        return data.toString()
+        val objectMapper = ObjectMapper().registerModule(KotlinModule())
+        return objectMapper.writeValueAsString(data)
+        //return data.toString()
     }
 
 
