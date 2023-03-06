@@ -47,8 +47,18 @@ class ProductController @Autowired constructor(
     }
 
     data class SearchRequest(val term: String)
+
     @GetMapping("/search")
     fun searchProduct(@RequestParam request: SearchRequest) : String? {
-        return productService.searchByTerm(request.term)
+            return productService.searchByTerm(request.term)
+    }
+    @GetMapping("/sort-name")
+    fun sortName(@RequestParam reversed: Boolean) : String {
+        return productService.sortByName(reversed)
+    }
+
+    @GetMapping("/sort-price")
+    fun sortPrice(@RequestParam reversed: Boolean) : String {
+        return productService.sortByPrice(reversed)
     }
 }

@@ -9,6 +9,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @Service
 class ProductService @Autowired constructor(){
@@ -82,10 +85,53 @@ class ProductService @Autowired constructor(){
         val docRef = db.collection("productDemo").get().get().documents
         val data = ArrayList<Map<String, Any>>()
         for (document in docRef) {
-            if (document.data["name"].toString().contains(term))
+            if (document.data["name"].toString().lowercase(Locale.getDefault()).contains(term))
                 data.add(document.data)
         }
 
         return Gson().toJson(data)
     }
+
+    fun sortByName(reversed: Boolean) : String {
+        val db = FirestoreClient.getFirestore()
+        val collection = db.collection("productDemo")
+        val data = ArrayList<Map<String, Any>>()
+
+        //for (collection in collectList) {
+            val docRefs = collection.get().get().documents
+            for (document in docRefs) {
+                data.add(document.data)
+            }
+        //}
+        if (reversed)
+            data.sortWith(NameComparator().reversed())
+        else
+            data.sortWith(NameComparator())
+        return Gson().toJson(data)
+    }
+
+    fun sortByPrice(reversed: Boolean) : String{
+        val db = FirestoreClient.getFirestore()
+        val collection = db.collection("productDemo")
+        val data = ArrayList<Map<String, Any>>()
+
+        //for (collection in collectList) {
+        val docRefs = collection.get().get().documents
+        for (document in docRefs) {
+            data.add(document.data)
+        }
+        //}
+        if (reversed)
+            data.sortWith(PriceComparator().reversed())
+        else
+            data.sortWith(PriceComparator())
+        return Gson().toJson(data)
+    }
+
+    fun filterProduct(json: Gson) : String {
+        val sortedList = ArrayList<Gson>()
+        
+        return ""
+    }
+
 }
