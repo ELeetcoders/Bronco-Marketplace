@@ -1,5 +1,6 @@
 package com.eleetcoders.api.controllers
 
+import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.services.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,23 +22,18 @@ class ProductController @Autowired constructor(
     }
 
     @PostMapping("/post")
-    fun postProduct(): String {
-        return productService.postProduct()
-    }
-
-    @GetMapping("/find-product")
-    fun findProduct(@RequestBody id: String): String {
-        return productService.findProduct(id)
+    fun postProduct(@RequestBody product: Product): String {
+        return productService.postProduct(product)
     }
 
     @GetMapping("/del-product")
-    fun deleteProduct(@RequestBody id: String) : Boolean {
-        return productService.deleteProduct(id)
+    fun deleteProduct(@RequestBody product: Product) : Boolean {
+        return productService.deleteProduct(product)
     }
 
     @PostMapping("/update-product")
-    fun updateProduct(@RequestBody id: String) : Boolean {
-        return productService.updateProduct(id)
+    fun updateProduct(@RequestBody product: Product) : Boolean {
+        return productService.updateProduct(product)
     }
 
     @GetMapping("/filter-price")

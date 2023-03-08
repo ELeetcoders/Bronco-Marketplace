@@ -1,7 +1,9 @@
 package com.eleetcoders.api.services
+import com.eleetcoders.api.models.Product
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.api.core.ApiFuture
+import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.WriteResult
 import com.google.firebase.cloud.FirestoreClient
@@ -14,7 +16,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 @Service
-class ProductService @Autowired constructor(){
+class ProductService @Autowired constructor() {
 
     fun getProduct(): String {
         val db: Firestore = FirestoreClient.getFirestore()
@@ -38,38 +40,34 @@ class ProductService @Autowired constructor(){
         return gson.toJson(products)
     }
 
-    fun postProduct(): String {
+    fun postProduct(product: Product): String {
         val db: Firestore = FirestoreClient.getFirestore()
-        val docRef = db.collection("test").document("mytestdoc5")
-        val data: MutableMap<String, Any> = HashMap()
-        data["field1"] = "12345"
-        data["field2"] = "1234"
-        data["field3"] = "123"
-        val result: ApiFuture<WriteResult> = docRef.set(data)
+        val docRef = db.collection(product.category).document(product.id)
+        val data: MutableMap<String, Any> = hashMapOf(
+            "name" to product.name,
+            "price" to product.price, "username" to product.username
+        )
 
-        return "Update time : " + result.get().updateTime
+        return docRef.create(data).toString()
     }
-
-    fun findProduct(id: String): String {
-        val db: Firestore = FirestoreClient.getFirestore()
-        val querySnapshot = db.collection("test").document(id).get().get().data
-
-        return querySnapshot.toString()
-    }
-
-    fun deleteProduct(id: String) : Boolean {
-        val db: Firestore = FirestoreClient.getFirestore()
-        db.collection("test").document(id).delete()
+    fun deleteProduct(product: Product): Boolean {
+        val docRef = findProduct(product)
+        docRef.delete()
         return true
     }
 
-    fun updateProduct(id: String) : Boolean {
+    private fun findProduct(product: Product): DocumentReference{
         val db: Firestore = FirestoreClient.getFirestore()
-        db.collection("test").document(id).update("hello", "not world")
+        return db.collection(product.category).document(product.id)
+    }
+
+    fun updateProduct(product: Product): Boolean {
+        val productRef = findProduct(product)
+        productRef.update("price", 500)
         return true
     }
 
-    fun filterByPrice(max: Double) : String? {
+    fun filterByPrice(max: Double): String? {
         val db = FirestoreClient.getFirestore()
         val docRef = db.collection("productDemo").get().get().documents
         val data = ArrayList<Map<String, Any>>()
@@ -82,26 +80,29 @@ class ProductService @Autowired constructor(){
 
     fun searchByTerm(term: String): String? {
         val db = FirestoreClient.getFirestore()
-        val docRef = db.collection("productDemo").get().get().documents
+        val collections = db.listCollections()
         val data = ArrayList<Map<String, Any>>()
-        for (document in docRef) {
-            if (document.data["name"].toString().lowercase(Locale.getDefault()).contains(term))
-                data.add(document.data)
+
+        for (collection in collections) {
+            for (document in collection.get().get().documents) {
+                if (document.data["name"].toString().lowercase(Locale.getDefault()).contains(term))
+                    data.add(document.data)
+            }
         }
 
         return Gson().toJson(data)
     }
 
-    fun sortByName(reversed: Boolean) : String {
+    fun sortByName(reversed: Boolean): String {
         val db = FirestoreClient.getFirestore()
         val collection = db.collection("productDemo")
         val data = ArrayList<Map<String, Any>>()
 
         //for (collection in collectList) {
-            val docRefs = collection.get().get().documents
-            for (document in docRefs) {
-                data.add(document.data)
-            }
+        val docRefs = collection.get().get().documents
+        for (document in docRefs) {
+            data.add(document.data)
+        }
         //}
         if (reversed)
             data.sortWith(NameComparator().reversed())
@@ -110,7 +111,7 @@ class ProductService @Autowired constructor(){
         return Gson().toJson(data)
     }
 
-    fun sortByPrice(reversed: Boolean) : String{
+    fun sortByPrice(reversed: Boolean): String {
         val db = FirestoreClient.getFirestore()
         val collection = db.collection("productDemo")
         val data = ArrayList<Map<String, Any>>()
@@ -127,11 +128,4 @@ class ProductService @Autowired constructor(){
             data.sortWith(PriceComparator())
         return Gson().toJson(data)
     }
-
-    fun filterProduct(json: Gson) : String {
-        val sortedList = ArrayList<Gson>()
-        
-        return ""
-    }
-
 }
