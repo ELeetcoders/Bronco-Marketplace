@@ -18,26 +18,19 @@ import kotlin.collections.HashMap
 @Service
 class ProductService @Autowired constructor() {
 
-    fun getProduct(): String {
-        val db: Firestore = FirestoreClient.getFirestore()
-        val query = db.collection("test").document("mytestdoc")
-        val querySnapshot = query.get().get()
-        val field1 = querySnapshot.getString("field1")
-        val field2 = querySnapshot.getString("field2")
-        val field3 = querySnapshot.getString("field3")
-
-        return "$field1\n$field2\n$field3"
-    }
-
     fun getAllProducts(): String {
         val db: Firestore = FirestoreClient.getFirestore()
-        val querySnapshot = db.collection("productDemo").get().get()
+        val collections = db.listCollections()
         val products = mutableListOf<Map<String, Any>>()
-        for (document in querySnapshot.documents) {
-            products.add(document.data)
+
+        for (collection in collections) {
+            if (collection.id == "users")
+                continue
+            for (document in collection.get().get().documents) {
+                products.add(document.data)
+            }
         }
-        val gson = Gson()
-        return gson.toJson(products)
+        return Gson().toJson(products)
     }
 
     fun postProduct(product: Product): String {
@@ -61,9 +54,22 @@ class ProductService @Autowired constructor() {
         return db.collection(product.category).document(product.id)
     }
 
-    fun updateProduct(product: Product): Boolean {
+    // TODO: make is so that this takes name, desc, price
+    fun updateProduct(product: Product, name: String?, desc: String?, price: Int?): Boolean {
         val productRef = findProduct(product)
-        productRef.update("price", 500)
+        var upName = product.name
+        var upDesc = product.desc
+        var upPrice = product.price
+        if (name != null)
+            upName = name
+        if (desc != null)
+            upDesc = desc
+        if (price != null)
+            upPrice = price
+
+        val data = mapOf<String, Any>("name" to upName, "desc" to upDesc, "price" to upPrice)
+        productRef.update(data)
+
         return true
     }
 
@@ -128,4 +134,23 @@ class ProductService @Autowired constructor() {
             data.sortWith(PriceComparator())
         return Gson().toJson(data)
     }
+
+    fun getProduct(product: Product): String {
+        return Gson().toJson(product)
+    }
+
+    fun createObj(product: Product): Boolean {
+        val db = FirestoreClient.getFirestore()
+        val category = product.category
+        val id = product.id
+        val ref = db.collection(category).document(id)
+
+        val data: MutableMap<String, Any> = hashMapOf(
+            "name" to product.name, "price" to product.price,
+            "username" to product.username, "desc" to product.desc
+        )
+
+        return !ref.create(data).isCancelled
+    }
+
 }
