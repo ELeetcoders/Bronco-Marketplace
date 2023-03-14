@@ -16,7 +16,9 @@ class FirebaseInit {
     @PostConstruct
     fun initialization() {
 
-        val serviceAccount = FileInputStream("./api/serviceAccountKey.json")
+        //val serviceAccount = FileInputStream("./api/serviceAccountKey.json")
+        //val serviceAccount = FirebaseInit::class.java.classLoader.getResourceAsStream("serviceAccountKey.json")
+        val serviceAccount = FirebaseInit::class.java.getResourceAsStream("/serviceAccountKey.json")
 
         val options: FirebaseOptions = FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))

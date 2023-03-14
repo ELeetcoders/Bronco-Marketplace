@@ -29,6 +29,7 @@ dependencies {
 	implementation("com.google.code.gson:gson:2.10.1")
 
 	implementation("com.google.firebase:firebase-admin:9.1.1")
+
 }
 
 tasks.withType<KotlinCompile> {
@@ -41,3 +42,20 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+//tasks.withType<Jar> {
+//	manifest {
+//		attributes["Main-Class"] = "com.eleetcoders.api.ApiApplication"
+//	}
+//}
+
+tasks.jar {
+	manifest {
+		attributes["Main-Class"] = "com.eleetcoders.api.ApiApplication"
+	}
+	configurations["compileClasspath"].forEach { file: File ->
+		from(zipTree(file.absoluteFile))
+	}
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
