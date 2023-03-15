@@ -33,15 +33,15 @@ class ProductService @Autowired constructor() {
         return Gson().toJson(products)
     }
 
-    fun postProduct(product: Product): String {
+    fun postProduct(product: Product): Boolean {
         val db: Firestore = FirestoreClient.getFirestore()
         val docRef = db.collection(product.category).document(product.id)
         val data: MutableMap<String, Any> = hashMapOf(
-            "name" to product.name,
-            "price" to product.price, "username" to product.username
+            "name" to product.name, "price" to product.price,
+            "desc" to product.desc, "username" to product.username
         )
 
-        return docRef.create(data).toString()
+        return !docRef.create(data).isCancelled
     }
     fun deleteProduct(product: Product): Boolean {
         val docRef = findProduct(product)
@@ -54,7 +54,6 @@ class ProductService @Autowired constructor() {
         return db.collection(product.category).document(product.id)
     }
 
-    // TODO: make is so that this takes name, desc, price
     fun updateProduct(product: Product, name: String?, desc: String?, price: Int?): Boolean {
         val productRef = findProduct(product)
         var upName = product.name
@@ -137,20 +136,6 @@ class ProductService @Autowired constructor() {
 
     fun getProduct(product: Product): String {
         return Gson().toJson(product)
-    }
-
-    fun createObj(product: Product): Boolean {
-        val db = FirestoreClient.getFirestore()
-        val category = product.category
-        val id = product.id
-        val ref = db.collection(category).document(id)
-
-        val data: MutableMap<String, Any> = hashMapOf(
-            "name" to product.name, "price" to product.price,
-            "username" to product.username, "desc" to product.desc
-        )
-
-        return !ref.create(data).isCancelled
     }
 
 }

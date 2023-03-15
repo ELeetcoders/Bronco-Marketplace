@@ -25,7 +25,7 @@ class ProductController @Autowired constructor(
     }
 
     @PostMapping("/post")
-    fun postProduct(@RequestBody product: Product): String {
+    fun postProduct(@RequestBody product: Product): Boolean {
         return productService.postProduct(product)
     }
 
@@ -70,10 +70,5 @@ class ProductController @Autowired constructor(
     @GetMapping("/get-product")
     fun getProduct(@RequestBody product: Product): String {
         return productService.getProduct(product)
-    }
-
-    @PostMapping("/create-obj")
-    fun createObj(@RequestBody product: Product): Boolean {
-        return productService.createObj(product)
     }
 }
