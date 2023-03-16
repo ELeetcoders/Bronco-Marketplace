@@ -51,7 +51,7 @@ class UserController constructor(
     }
 
     @PostMapping("/remove-listing")
-    fun removeListing(@RequestBody product: Product) : Boolean {
+    fun removeListing(@RequestBody product: Product) : String {
         return userService.removeListing(product)
     }
 }

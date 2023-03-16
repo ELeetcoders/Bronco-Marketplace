@@ -2,6 +2,7 @@ package com.eleetcoders.api.services
 
 import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
+import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
 import com.google.firebase.cloud.FirestoreClient
 import com.google.gson.Gson
@@ -63,13 +64,13 @@ class UserService {
         return db.collection(category.name).document(docId).get().get().exists()
     }
 
-    fun removeListing(product: Product) : Boolean {
+    fun removeListing(product: Product) : String {
         val db = FirestoreClient.getFirestore()
         val docRef = db.collection(product.category.name).document(product.id)
 
         if (!docRef.get().get().exists())
-            return false
+            return Gson().toJson(Status.FAIL)
         docRef.delete()
-        return true
+        return Gson().toJson(Status.PASS)
     }
 }

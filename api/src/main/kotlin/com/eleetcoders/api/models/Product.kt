@@ -10,10 +10,7 @@ class Product @JsonCreator constructor(
     @JsonProperty("price") val price: Double = -1.0,
     @JsonProperty("email") val email: String = "",
     @JsonProperty("desc") val desc: String = "",
-    @JsonProperty("category") private val temp: String,
-    val category : Category = ignoreCase(temp)
-
-
+    @JsonProperty("category") val category: Category = Category.NONE
     ) {
     override fun toString(): String {
         return Gson().toJson(this)
