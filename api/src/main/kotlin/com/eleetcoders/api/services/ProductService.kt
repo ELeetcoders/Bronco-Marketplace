@@ -1,19 +1,14 @@
 package com.eleetcoders.api.services
+import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.google.api.core.ApiFuture
 import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Firestore
-import com.google.cloud.firestore.WriteResult
 import com.google.firebase.cloud.FirestoreClient
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 @Service
 class ProductService @Autowired constructor() {
@@ -25,6 +20,20 @@ class ProductService @Autowired constructor() {
 
         for (collection in collections) {
             if (collection.id == "users")
+                continue
+            for (document in collection.get().get().documents) {
+                products.add(document.data)
+            }
+        }
+        return Gson().toJson(products)
+    }
+
+    fun getAllProductsByCategory(category: Category): String {
+        val db: Firestore = FirestoreClient.getFirestore()
+        val collections = db.listCollections()
+        val products = mutableListOf<Map<String, Any>>()
+        for (collection in collections) {
+            if (collection.id != category.category)
                 continue
             for (document in collection.get().get().documents) {
                 products.add(document.data)

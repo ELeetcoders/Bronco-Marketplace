@@ -1,17 +1,11 @@
 package com.eleetcoders.api.controllers
 
+import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.services.ProductService
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.api.client.json.Json
-import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/product")
@@ -22,6 +16,11 @@ class ProductController @Autowired constructor(
     @GetMapping("/get-all")
     fun getProduct(): String {
         return productService.getAllProducts()
+    }
+
+    @GetMapping("/{category}/get-all")
+    fun getAllProductsByCategory(@PathVariable category: Category): String {
+        return productService.getAllProductsByCategory(category)
     }
 
     @PostMapping("/post")
