@@ -9,7 +9,7 @@ class Product @JsonCreator constructor(
     @JsonProperty("name") val name: String = "",
     @JsonProperty("price") val price: Int = 0,
     @JsonProperty("category") val category: String = "",
-    @JsonProperty("username") val username: String = "",
+    @JsonProperty("email") val email: String = "",
     @JsonProperty("desc") val desc: String = ""
 ) {
     override fun toString(): String {

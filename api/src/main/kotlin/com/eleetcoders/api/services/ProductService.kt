@@ -38,7 +38,7 @@ class ProductService @Autowired constructor() {
         val docRef = db.collection(product.category).document(product.id)
         val data: MutableMap<String, Any> = hashMapOf(
             "name" to product.name, "price" to product.price,
-            "desc" to product.desc, "username" to product.username
+            "desc" to product.desc, "email" to product.email
         )
 
         return !docRef.create(data).isCancelled
