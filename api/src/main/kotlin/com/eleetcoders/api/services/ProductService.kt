@@ -35,7 +35,7 @@ class ProductService @Autowired constructor() {
 
     fun postProduct(product: Product): Boolean {
         val db: Firestore = FirestoreClient.getFirestore()
-        val docRef = db.collection(product.category).document(product.id)
+        val docRef = db.collection(product.category.name).document(product.id)
         val data: MutableMap<String, Any> = hashMapOf(
             "name" to product.name, "price" to product.price,
             "desc" to product.desc, "email" to product.email
@@ -51,10 +51,10 @@ class ProductService @Autowired constructor() {
 
     private fun findProduct(product: Product): DocumentReference{
         val db: Firestore = FirestoreClient.getFirestore()
-        return db.collection(product.category).document(product.id)
+        return db.collection(product.category.name).document(product.id)
     }
 
-    fun updateProduct(product: Product, name: String?, desc: String?, price: Int?): Boolean {
+    fun updateProduct(product: Product, name: String?, desc: String?, price: Double?): Boolean {
         val productRef = findProduct(product)
         var upName = product.name
         var upDesc = product.desc

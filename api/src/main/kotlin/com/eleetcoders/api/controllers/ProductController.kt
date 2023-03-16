@@ -41,7 +41,7 @@ class ProductController @Autowired constructor(
         } ?: throw IllegalArgumentException("Missing required 'product' field in request body")
         val name = myJson.getOrDefault("name", "") as String
         val desc = myJson.getOrDefault("desc", "") as String
-        val price = myJson.getOrDefault("price", 0) as Int
+        val price = myJson.getOrDefault("price", 0) as Double
         return productService.updateProduct(product, name, desc, price)
     }
 

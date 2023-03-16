@@ -43,7 +43,7 @@ class UserController constructor(
     fun createListing(@RequestBody data : Map<String, Any>) : Boolean {
         val user = getObj<User>(data, "user")
         val name = data.getOrDefault("name", "") as String
-        val category = data.getOrDefault("category", "") as String
+        val category = Product.ignoreCase(data.getOrDefault("category", "") as String)
         val price = data.getOrDefault("price", -1.0) as Double
         val desc = data.getOrDefault("desc", "") as String
 
