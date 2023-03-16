@@ -4,7 +4,6 @@ import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.models.User
 import com.eleetcoders.api.services.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.convertValue
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -43,9 +42,12 @@ class UserController constructor(
     @PostMapping("/create-listing")
     fun createListing(@RequestBody data : Map<String, Any>) : Boolean {
         val user = getObj<User>(data, "user")
-        val product = getObj<Product>(data, "product")
+        val name = data.getOrDefault("name", "") as String
+        val category = data.getOrDefault("category", "") as String
+        val price = data.getOrDefault("price", -1.0) as Double
+        val desc = data.getOrDefault("desc", "") as String
 
-        return userService.createListing(user, product)
+        return userService.createListing(user, name, desc, price, category)
     }
 
     @PostMapping("/remove-listing")

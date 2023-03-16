@@ -49,17 +49,16 @@ class UserService {
         return Gson().toJson(productList)
     }
 
-    fun createListing(user: User, product: Product) : Boolean {
-        val db = FirestoreClient.getFirestore()
-        val docRef = db.collection(product.category).document(product.id)
+    fun createListing(user: User, name: String, desc: String, price : Double, category : String) : Boolean {
 
-        if (docRef.get().get().exists())
+        if (price < 0)
             return false
 
-        val data = mutableMapOf<String, Any>("name" to product.name, "desc" to product.desc,
-            "price" to product.price, "email" to user.email)
-        docRef.create(data)
-        return true
+        val db = FirestoreClient.getFirestore()
+        val data = mutableMapOf<String, Any>("name" to name, "desc" to desc,
+            "price" to price, "email" to user.email)
+        val docId = db.collection(category).add(data).get().id
+        return db.collection(category).document(docId).get().get().exists()
     }
 
     fun removeListing(product: Product) : Boolean {
