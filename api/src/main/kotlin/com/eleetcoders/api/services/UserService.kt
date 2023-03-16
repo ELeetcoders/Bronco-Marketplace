@@ -1,5 +1,6 @@
 package com.eleetcoders.api.services
 
+import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.models.User
 import com.google.firebase.cloud.FirestoreClient
@@ -49,22 +50,22 @@ class UserService {
         return Gson().toJson(productList)
     }
 
-    fun createListing(user: User, product: Product) : Boolean {
-        val db = FirestoreClient.getFirestore()
-        val docRef = db.collection(product.category).document(product.id)
+    fun createListing(user: User, name: String, desc: String, price: Double, category: Product.Category) : Boolean {
 
-        if (docRef.get().get().exists())
+        if (price < 0 ||
+            category == Product.Category.NONE)
             return false
 
-        val data = mutableMapOf<String, Any>("name" to product.name, "desc" to product.desc,
-            "price" to product.price, "email" to user.email)
-        docRef.create(data)
-        return true
+        val db = FirestoreClient.getFirestore()
+        val data = mutableMapOf<String, Any>("name" to name, "desc" to desc,
+            "price" to price, "email" to user.email)
+        val docId = db.collection(category.name).add(data).get().id
+        return db.collection(category.name).document(docId).get().get().exists()
     }
 
     fun removeListing(product: Product) : Boolean {
         val db = FirestoreClient.getFirestore()
-        val docRef = db.collection(product.category).document(product.id)
+        val docRef = db.collection(product.category.name).document(product.id)
 
         if (!docRef.get().get().exists())
             return false
