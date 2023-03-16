@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
 	implementation("org.apache.commons:commons-lang3:3.0")
 	implementation("org.jsoup:jsoup:1.15.4")
