@@ -1,6 +1,7 @@
 package com.eleetcoders.api.controllers
 
 import com.eleetcoders.api.models.Product
+import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
 import com.eleetcoders.api.services.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -23,7 +24,7 @@ class UserController constructor(
     }
 
     @PostMapping("/create-user")
-    fun createUser(@RequestBody user: User) : Boolean {
+    fun createUser(@RequestBody user: User) : String {
         return userService.createUser(user)
     }
 

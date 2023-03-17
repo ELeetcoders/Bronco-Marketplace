@@ -1,6 +1,5 @@
 package com.eleetcoders.api.services
 
-import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
@@ -10,7 +9,7 @@ import com.google.gson.Gson
 
 class UserService {
 
-    fun createUser(user: User): Boolean {
+    fun createUser(user: User): String {
 
         val db = FirestoreClient.getFirestore()
         val userRef = db.collection("user").document(user.email)
@@ -18,12 +17,12 @@ class UserService {
         if (userRef.get().get().exists() ||
             user.email.length < 9 ||
             user.email.substring(user.email.length-8) != "@cpp.edu")
-            return false
+            return Gson().toJson(Status.FAIL)
 
         val data = mapOf<String, Any>("username" to user.userName, "password" to user.password,
             "firstname" to user.firstname, "lastname" to user.lastname)
         userRef.create(data)
-        return true
+        return Gson().toJson(Status.SUCCESS)
 
     }
 
@@ -71,6 +70,6 @@ class UserService {
         if (!docRef.get().get().exists())
             return Gson().toJson(Status.FAIL)
         docRef.delete()
-        return Gson().toJson(Status.PASS)
+        return Gson().toJson(Status.SUCCESS)
     }
 }

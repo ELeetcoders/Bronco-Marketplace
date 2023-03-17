@@ -27,12 +27,13 @@ class ProductControllerTest {
     fun `should return JSON with all products for a given category`() {
         val products = listOf(
             Product("1", "Math book", 1.00, "food", "jane@example.com", Product.Category.BOOK),
-            Product("2", "CS book", 0.50, "food", "john@example.com", Product.Category.BOOK)
+            Product("2", "CS book", 0.50, "food", "john@example.com", Product.Category.BOOK),
+            Product("3", "CS1400 texting", 40.5, "email@example.com", "tutoring", Product.Category.SERVICES)
         )
 
-        Mockito.`when`(productService.getAllProductsByCategory(Product.Category.BOOK)).thenReturn(Gson().toJson(products))
+        Mockito.`when`(productService.getAllProductsByCategory(Product.Category.BOOK)).thenReturn(Gson().toJson(products.subList(0, 2)))
 
-        val expectedResponse = Gson().toJson(products)
+        val expectedResponse = Gson().toJson(products.subList(0,2))
         val result = mockMvc.perform(get("/product/BOOK/get-all"))
             .andExpect(status().isOk)
             .andExpect(content().json(expectedResponse))
