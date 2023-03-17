@@ -1,5 +1,4 @@
 package com.eleetcoders.api.services
-import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
 import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Firestore
@@ -28,15 +27,14 @@ class ProductService @Autowired constructor() {
         return Gson().toJson(products)
     }
 
-    fun getAllProductsByCategory(category: Category): String {
+    fun getAllProductsByCategory(category: Product.Category): String {
         val db: Firestore = FirestoreClient.getFirestore()
         val collections = db.listCollections()
         val products = mutableListOf<Map<String, Any>>()
         for (collection in collections) {
-            if (collection.id != category.category)
-                continue
-            for (document in collection.get().get().documents) {
-                products.add(document.data)
+            if (collection.id == category.name)
+                for (document in collection.get().get().documents) {
+                    products.add(document.data)
             }
         }
         return Gson().toJson(products)

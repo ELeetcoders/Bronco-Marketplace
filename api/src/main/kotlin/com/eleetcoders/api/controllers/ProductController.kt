@@ -1,6 +1,5 @@
 package com.eleetcoders.api.controllers
 
-import com.eleetcoders.api.models.Category
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.services.ProductService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,7 +18,7 @@ class ProductController @Autowired constructor(
     }
 
     @GetMapping("/{category}/get-all")
-    fun getAllProductsByCategory(@PathVariable category: Category): String {
+    fun getAllProductsByCategory(@PathVariable category: Product.Category): String {
         return productService.getAllProductsByCategory(category)
     }
 
