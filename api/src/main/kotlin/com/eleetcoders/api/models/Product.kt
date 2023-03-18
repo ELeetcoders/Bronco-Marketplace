@@ -15,6 +15,7 @@ class Product @JsonCreator constructor(
     @JsonProperty("price") val price: Double = -1.0,
     @JsonProperty("email") val email: String = "",
     @JsonProperty("desc") val desc: String = "",
+    @JsonProperty("imageURL") val imageURL: String = "",
 
     @JsonProperty("category", required = true)
     @JsonDeserialize(using = CategoryDeserializer::class)
@@ -29,6 +30,11 @@ class Product @JsonCreator constructor(
         BOOK,
         TECH,
         SERVICES
+    }
+    companion object {
+        fun ignoreCase(input: String): Category {
+            return Category.values().firstOrNull { it.name.equals(input, true) } ?: return Category.NONE
+        }
     }
     class CategoryDeserializer : JsonDeserializer<Category>() {
         override fun deserialize(parser: JsonParser, ctxt: DeserializationContext): Category {
