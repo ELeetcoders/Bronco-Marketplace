@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @Service
 class ProductService @Autowired constructor() {
@@ -15,14 +16,17 @@ class ProductService @Autowired constructor() {
     fun getAllProducts(): String {
         val db: Firestore = FirestoreClient.getFirestore()
         val collections = db.listCollections()
-        val products = mutableListOf<Map<String, Any>>()
+        val products = HashMap<String, ArrayList<Map<String, Any>>>()
 
         for (collection in collections) {
-            if (collection.id == "users")
+            val collectionName = collection.id
+            if (collectionName == "users")
                 continue
+            val temp = ArrayList<Map<String,Any>>()
             for (document in collection.get().get().documents) {
-                products.add(document.data)
+                temp.add(document.data)
             }
+            products[collectionName] = temp
         }
         return Gson().toJson(products)
     }
