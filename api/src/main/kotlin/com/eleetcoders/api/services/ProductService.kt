@@ -20,7 +20,7 @@ class ProductService @Autowired constructor() {
 
         for (collection in collections) {
             val collectionName = collection.id
-            if (collectionName == "users")
+            if (collectionName == "user")
                 continue
             val temp = ArrayList<Map<String,Any>>()
             for (document in collection.get().get().documents) {
