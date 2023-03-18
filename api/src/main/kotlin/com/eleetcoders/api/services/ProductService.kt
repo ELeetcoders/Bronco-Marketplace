@@ -97,16 +97,20 @@ class ProductService @Autowired constructor() {
     fun searchByTerm(term: String): String? {
         val db = FirestoreClient.getFirestore()
         val collections = db.listCollections()
-        val data = ArrayList<Map<String, Any>>()
 
+        val products = HashMap<String, ArrayList<Map<String, Any>>>()
         for (collection in collections) {
+            val collectionName = collection.id
+            if (collectionName == "user")
+                continue
+            val temp = ArrayList<Map<String,Any>>()
             for (document in collection.get().get().documents) {
                 if (document.data["name"].toString().lowercase(Locale.getDefault()).contains(term))
-                    data.add(document.data)
+                    temp.add(document.data)
             }
+            products[collectionName] = temp
         }
-
-        return Gson().toJson(data)
+        return Gson().toJson(products)
     }
 
     fun sortByName(reversed: Boolean): String {
