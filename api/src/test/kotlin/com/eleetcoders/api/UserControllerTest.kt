@@ -30,9 +30,9 @@ class UserControllerTest {
     fun `should return all products with same email`() {
         val user = User("test@cpp.edu", "pass", "testing", "te", "st")
         val products = listOf<Product>(
-            Product("1", "test", 10.2, "test@cpp.edu", "this should pass", Product.Category.BOOK),
-            Product("2", "test2", 1000.2, "test@cpp.edu", "this should pass", Product.Category.SERVICES),
-            Product("3", "test3", 10.322, "ahhh@cpp.edu", "this shouldnt pass", Product.Category.BOOK)
+            Product("1", "test", 10.2, "test@cpp.edu", "this should pass", "", Product.Category.BOOK),
+            Product("2", "test2", 1000.2, "test@cpp.edu", "this should pass", "", Product.Category.SERVICES),
+            Product("3", "test3", 10.322, "ahhh@cpp.edu", "this shouldnt pass", "", Product.Category.BOOK)
 
         )
 
