@@ -59,7 +59,7 @@ class UserService {
 
         val db = FirestoreClient.getFirestore()
         val data = mutableMapOf<String, Any>("name" to name, "desc" to desc,
-            "price" to price, "email" to user.email, "imageURL" to imageURL)
+            "price" to price, "email" to user.email, "imageUrl" to imageURL)
         val docId = db.collection(category.name).add(data).get().id
         return db.collection(category.name).document(docId).get().get().exists()
     }
