@@ -105,8 +105,11 @@ class ProductService @Autowired constructor() {
                 continue
             val temp = ArrayList<Map<String,Any>>()
             for (document in collection.get().get().documents) {
-                if (document.data["name"].toString().lowercase(Locale.getDefault()).contains(term))
-                    temp.add(document.data)
+                if (document.data["name"].toString().lowercase(Locale.getDefault()).
+                    contains(term.lowercase(Locale.getDefault())))
+                {
+                 temp.add(document.data)
+                }
             }
             products[collectionName] = temp
         }
@@ -118,12 +121,10 @@ class ProductService @Autowired constructor() {
         val collection = db.collection("productDemo")
         val data = ArrayList<Map<String, Any>>()
 
-        //for (collection in collectList) {
         val docRefs = collection.get().get().documents
         for (document in docRefs) {
             data.add(document.data)
         }
-        //}
         if (reversed)
             data.sortWith(NameComparator().reversed())
         else
@@ -136,12 +137,11 @@ class ProductService @Autowired constructor() {
         val collection = db.collection("productDemo")
         val data = ArrayList<Map<String, Any>>()
 
-        //for (collection in collectList) {
         val docRefs = collection.get().get().documents
         for (document in docRefs) {
             data.add(document.data)
         }
-        //}
+
         if (reversed)
             data.sortWith(PriceComparator().reversed())
         else
