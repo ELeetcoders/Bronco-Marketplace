@@ -22,31 +22,14 @@ class ProductController @Autowired constructor(
         return productService.getAllProductsByCategory(category)
     }
 
-    @PostMapping("/post")
-    fun postProduct(@RequestBody product: Product): Boolean {
-        return productService.postProduct(product)
-    }
-
-    @GetMapping("/del-product")
-    fun deleteProduct(@RequestBody product: Product) : Boolean {
-        return productService.deleteProduct(product)
-    }
-
-    @PostMapping("/update-product")
-    fun updateProduct(@RequestBody myJson: Map<String, Any>) : Boolean {
-        val product = myJson["product"]?.let {
-            ObjectMapper().convertValue(it as Map<*, *>, Product::class.java)
-        } ?: throw IllegalArgumentException("Missing required 'product' field in request body")
-        val name = myJson.getOrDefault("name", "") as String
-        val desc = myJson.getOrDefault("desc", "") as String
-        val price = myJson.getOrDefault("price", 0) as Double
-        return productService.updateProduct(product, name, desc, price)
-    }
-
     @GetMapping("/filter-price")
-    fun filterByPrice(@RequestBody max: String) : String? {
-        val price = max.toDouble()
-        return productService.filterByPrice(price)
+    fun filterByPrice(@RequestParam max: String) : String? {
+        return productService.filterByPrice(max.toDouble())
+    }
+
+    @GetMapping("/search-email")
+    fun searchByEmail(@RequestParam email: SearchRequest) : String {
+        return productService.searchByEmail(email.term)
     }
 
     data class SearchRequest(val term: String)
