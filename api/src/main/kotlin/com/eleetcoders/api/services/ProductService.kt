@@ -1,16 +1,14 @@
 package com.eleetcoders.api.services
 import com.eleetcoders.api.models.Product
-import com.google.cloud.firestore.DocumentReference
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.FirestoreClient
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.Double
-import kotlin.Long
 
 @Service
 class ProductService @Autowired constructor() {
@@ -18,15 +16,15 @@ class ProductService @Autowired constructor() {
     fun getAllProducts(): String {
         val db: Firestore = FirestoreClient.getFirestore()
         val collections = db.listCollections()
-        val products = HashMap<String, ArrayList<Map<String, Any>>>()
+        val products = HashMap<String, MutableList<Product>>()
 
         for (collection in collections) {
             val collectionName = collection.id
             if (collectionName == "user")
                 continue
-            val temp = ArrayList<Map<String,Any>>()
+            val temp = ArrayList<Product>()
             for (document in collection.get().get().documents) {
-                temp.add(document.data)
+                temp.add(dataToProduct(document.data, document.id, Product.ignoreCase(collectionName)))
             }
             products[collectionName] = temp
         }
@@ -36,22 +34,17 @@ class ProductService @Autowired constructor() {
     fun getAllProductsByCategory(category: Product.Category): String {
         val db: Firestore = FirestoreClient.getFirestore()
         val collections = db.listCollections()
-        val products = mutableListOf<Map<String, Any>>()
+        val products = mutableListOf<Product>()
         for (collection in collections) {
             if (collection.id == category.name)
                 for (document in collection.get().get().documents) {
-                    products.add(document.data)
+                    products.add(dataToProduct(document.data, document.id, Product.ignoreCase(collection.id)))
             }
         }
         return Gson().toJson(products)
     }
 
-    private fun findProduct(product: Product): DocumentReference{
-        val db: Firestore = FirestoreClient.getFirestore()
-        return db.collection(product.category.name).document(product.id)
-    }
-
-    fun filterByPrice(max: Double): String? {
+    fun filterByPrice(max: Double): String {
         val db = FirestoreClient.getFirestore()
         val collections = db.listCollections()
         val data = HashMap<String, ArrayList<Product>>()
@@ -115,35 +108,32 @@ class ProductService @Autowired constructor() {
     }
 
     fun sortByName(reversed: Boolean): String {
-        val db = FirestoreClient.getFirestore()
-        val collection = db.collection("productDemo")
-        val data = ArrayList<Map<String, Any>>()
+        val values = getAllProducts()
+        val typeToken = object : TypeToken<Map<String, MutableList<Product>>>() {}.type
+        val data = Gson().fromJson<Map<String, MutableList<Product>>>(values, typeToken)
 
-        val docRefs = collection.get().get().documents
-        for (document in docRefs) {
-            data.add(document.data)
+        for (list in data.values) {
+            if (reversed)
+                list.sortByDescending { it.name }
+            else
+                list.sortBy { it.name }
         }
-        if (reversed)
-            data.sortWith(NameComparator().reversed())
-        else
-            data.sortWith(NameComparator())
+
         return Gson().toJson(data)
     }
 
     fun sortByPrice(reversed: Boolean): String {
-        val db = FirestoreClient.getFirestore()
-        val collection = db.collection("productDemo")
-        val data = ArrayList<Map<String, Any>>()
+        val values = getAllProducts()
+        val typeToken = object : TypeToken<Map<String, MutableList<Product>>>() {}.type
+        val data = Gson().fromJson<Map<String, MutableList<Product>>>(values, typeToken)
 
-        val docRefs = collection.get().get().documents
-        for (document in docRefs) {
-            data.add(document.data)
+        for (list in data.values) {
+            if (reversed)
+                list.sortByDescending { it.price }
+            else
+                list.sortBy { it.price }
         }
 
-        if (reversed)
-            data.sortWith(PriceComparator().reversed())
-        else
-            data.sortWith(PriceComparator())
         return Gson().toJson(data)
     }
 
@@ -152,12 +142,11 @@ class ProductService @Autowired constructor() {
     }
 
     private fun dataToProduct(data: MutableMap<String, Any>, id: String, category: Product.Category) : Product{
-        var price : Double
 
-        try {
-            price = data["price"] as Double
+        val price = try {
+            data["price"] as Double
         } catch (e : Exception) {
-            price = (data["price"] as Long).toDouble()
+            (data["price"] as Long).toDouble()
         }
 
         return Product(id, data["name"] as String, price, data["email"] as String,
