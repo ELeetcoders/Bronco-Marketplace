@@ -54,16 +54,18 @@ class ProductService @Autowired constructor() {
     fun filterByPrice(max: Double): String? {
         val db = FirestoreClient.getFirestore()
         val collections = db.listCollections()
-        val data = ArrayList<Map<String, Any>>()
+        val data = HashMap<String, ArrayList<Product>>()
         for (collection in collections) {
             if (collection.id == "user")
                 continue
-            for (document in collection.listDocuments()) {
-                val temp = document.get().get().data
-                // TODO: be able to get price from firebase
-                if ((temp?.get("price") as Long).toDouble() <= max)
-                    data.add(temp)
+            val list = ArrayList<Product>()
+            for (document in collection.get().get().documents) {
+                val temp = document.data
+                val product = dataToProduct(temp, document.id, Product.ignoreCase(collection.id))
+                if (product.price <= max)
+                    list.add(product)
             }
+            data[collection.id] = list
         }
         return Gson().toJson(data)
     }
