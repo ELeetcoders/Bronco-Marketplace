@@ -15,11 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build
-        run: |
-          cd api
-          chmod +x gradlew
-          ./gradlew bootJar
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - run: cd api && chmod +x gradlew && ./gradlew bootJar
       
       - name: Copy bin to EC2
         uses: appleboy/scp-action@v0.1.4
