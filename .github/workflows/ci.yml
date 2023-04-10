@@ -42,4 +42,4 @@ jobs:
           script: |
             cd /home/ec2-user/
             killall java
-            nohup java -jar api-0.0.1-SNAPSHOT.jar &
+            setsid java -jar api-0.0.1-SNAPSHOT.jar &
