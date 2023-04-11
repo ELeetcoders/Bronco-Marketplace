@@ -23,11 +23,15 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
 	implementation("org.apache.commons:commons-lang3:3.0")
-
 	implementation("org.jsoup:jsoup:1.15.4")
+	implementation("com.google.code.gson:gson:2.10.1")
+
 	implementation("com.google.firebase:firebase-admin:9.1.1")
+
 }
 
 tasks.withType<KotlinCompile> {
@@ -40,3 +44,20 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+//tasks.withType<Jar> {
+//	manifest {
+//		attributes["Main-Class"] = "com.eleetcoders.api.ApiApplication"
+//	}
+//}
+
+tasks.jar {
+	manifest {
+		attributes["Main-Class"] = "com.eleetcoders.api.ApiApplication"
+	}
+	configurations["compileClasspath"].forEach { file: File ->
+		from(zipTree(file.absoluteFile))
+	}
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+

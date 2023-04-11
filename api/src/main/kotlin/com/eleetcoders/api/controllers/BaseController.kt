@@ -1,14 +1,8 @@
-package com.eleetcoders.api
+package com.eleetcoders.api.controllers
 
-import com.google.api.core.ApiFuture
-import com.google.cloud.firestore.Firestore
-import com.google.cloud.firestore.QuerySnapshot
-import com.google.cloud.firestore.WriteResult
-import com.google.firebase.cloud.FirestoreClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.apache.tomcat.util.codec.binary.Base64
-import org.jsoup.Jsoup
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -17,7 +11,11 @@ import java.time.LocalDateTime
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-
+import org.jsoup.Jsoup
+import org.springframework.beans.factory.annotation.Autowired
+import com.eleetcoders.api.services.ProductService
+import com.google.cloud.firestore.Firestore
+import com.google.firebase.cloud.FirestoreClient
 
 @RestController
 @RequestMapping("/")
@@ -76,28 +74,14 @@ class BaseController {
         return doc.appendText("This was all parsed with JSoup").html()
     }
 
-    @GetMapping("/addtodb")
-    fun addToDb(): String {
-        val db: Firestore = FirestoreClient.getFirestore()
-        val docRef = db.collection("test").document("mytestdoc")
-        val data: MutableMap<String, Any> = HashMap()
-        data["field1"] = "12345"
-        data["field2"] = "1234"
-        data["field3"] = "123"
-        val result: ApiFuture<WriteResult> = docRef.set(data)
 
-        return "Update time : " + result.get().updateTime
-    }
 
-    @GetMapping("/getfromdb")
-    fun getFromDb(): String {
-        val db: Firestore = FirestoreClient.getFirestore()
-        val query = db.collection("test").document("mytestdoc")
-        val querySnapshot = query.get().get()
-        val field1 = querySnapshot.getString("field1")
-        val field2 = querySnapshot.getString("field2")
-        val field3 = querySnapshot.getString("field3")
 
-        return "$field1\n$field2\n$field3"
-    }
+
+
+
+
+
+
+
 }
