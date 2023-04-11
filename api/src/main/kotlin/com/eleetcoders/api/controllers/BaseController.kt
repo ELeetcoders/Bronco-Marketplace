@@ -27,6 +27,9 @@ class BaseController {
     @GetMapping("/michael")
     fun michael(): String = "API endpoint made by Michael!"
 
+    @GetMapping("/testdeploy")
+    fun testdeploy(): String = "This API endpoint should be seen"
+
     @GetMapping("/async")
     fun async(): String {
         var result = ""
