@@ -15,7 +15,7 @@ class Product @JsonCreator constructor(
     @JsonProperty("price") val price: Double = -1.0,
     @JsonProperty("email") val email: String = "",
     @JsonProperty("desc") val desc: String = "",
-    @JsonProperty("imageURL") val imageURL: String = "",
+    @JsonProperty("imageUrl") val imageUrl: String = "",
 
     @JsonProperty("category", required = true)
     @JsonDeserialize(using = CategoryDeserializer::class)
