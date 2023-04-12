@@ -41,5 +41,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/ec2-user/api/build/libs/
+            ls
             killall java
             nohup java -jar api-0.0.1-SNAPSHOT.jar > log.txt &
