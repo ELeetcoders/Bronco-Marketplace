@@ -44,3 +44,4 @@ jobs:
             ls
             killall java
             nohup java -jar api-0.0.1-SNAPSHOT.jar > log.txt &
+            cat log.txt
