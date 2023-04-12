@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - run: cd api && chmod +x gradlew && ./gradlew bootJar
+      - run: cd api && echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > src/main/resources/serviceAccountKey.json && chmod +x gradlew && ./gradlew bootJar
       
       - name: Copy bin to EC2
         uses: appleboy/scp-action@v0.1.4
