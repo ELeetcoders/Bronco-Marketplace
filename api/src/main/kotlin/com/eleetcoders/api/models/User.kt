@@ -11,6 +11,10 @@ class User @JsonCreator constructor(
     @JsonProperty("firstname") val firstname : String = "",
     @JsonProperty("lastname") val lastname : String = ""
 ){
+    constructor(
+        map : Map<String, String>
+    ) : this(map["email"] as String, map["password"] as String, map["username"] as String,
+        map["firstname"] as String, map["lastname"] as String)
     fun checkPassword(ps : String) : Boolean{
         return password == ps
     }

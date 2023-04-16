@@ -23,18 +23,6 @@ class UserController constructor(
         } ?: throw IllegalArgumentException("Missing required $dataType field in request body")
     }
 
-    @PostMapping("/create-user")
-    fun createUser(@RequestBody user: User) : String {
-        return userService.createUser(user)
-    }
-
-    @GetMapping("/login-user")
-    fun loginUser(@RequestBody userAndPassword : Map<String, Any>) : Boolean {
-        val user = getObj<User>(userAndPassword, "user")
-        val password = userAndPassword.getOrDefault("password", "") as String
-        return userService.loginUser(user, password)
-    }
-
     @GetMapping("/get-listings")
     fun getListings(@RequestBody user: User) : String {
         return userService.listProducts(user)

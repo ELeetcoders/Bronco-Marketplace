@@ -9,25 +9,22 @@ import com.google.gson.Gson
 
 class UserService {
 
-    fun createUser(user: User): String {
 
+    fun deleteUser(user: User) : String {
         val db = FirestoreClient.getFirestore()
-        val userRef = db.collection("user").document(user.email)
+        val collectionRef = db.listCollections()
 
-        if (userRef.get().get().exists() ||
-            user.email.length < 9 ||
-            user.email.substring(user.email.length-8) != "@cpp.edu")
-            return Gson().toJson(Status.FAIL)
+        for (collection in collectionRef) {
+            if (collection.id == "user")
+                continue
+            for (document in collection.listDocuments()) {
+                if (document.get().get().data?.get("email") as String  == user.email)
+                    document.delete()
+            }
+        }
 
-        val data = mapOf<String, Any>("username" to user.userName, "password" to user.password,
-            "firstname" to user.firstname, "lastname" to user.lastname)
-        userRef.create(data)
+        db.collection("user").document(user.email).delete()
         return Gson().toJson(Status.SUCCESS)
-
-    }
-
-    fun loginUser(user: User, password : String) : Boolean  {
-        return user.checkPassword(password)
     }
 
     fun listProducts(user: User) : String {
