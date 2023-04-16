@@ -21,6 +21,11 @@ jobs:
           json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
           dir: 'api/src/main/resources/'
 
+      - uses: finnp/create-file-action@1.0.0
+        env:
+          FILE_NAME: 'api/src/main/resources/keyBytes.txt'
+          FILE_DATA: ${{ secrets.ENCRYPTION_KEY }}
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
