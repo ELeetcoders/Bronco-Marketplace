@@ -5,10 +5,11 @@ import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
 import com.google.firebase.cloud.FirestoreClient
 import com.google.gson.Gson
+import org.springframework.web.bind.annotation.RequestBody
 
 
 class UserService {
-
+    
 
     fun deleteUser(user: User) : String {
         val db = FirestoreClient.getFirestore()

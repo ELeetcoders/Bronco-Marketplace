@@ -25,7 +25,7 @@ class LoginServices @Autowired constructor(
     val algorithm: String = "AES"
     val transformation : String = "AES/ECB/PKCS5Padding"
 
-    fun checkCreds(email : String, password : String) : String {
+    fun checkCredentials(email : String, password : String) : String {
         val firebase = FirestoreClient.getFirestore()
 
         val users = firebase.collection("user")
@@ -40,10 +40,13 @@ class LoginServices @Autowired constructor(
         }
 
         if (target == null)
-            return Gson().toJson(Status.SUCCESS)
+            return Gson().toJson(Status.FAIL)
 
-        if (decrypt(target.get("password") as String) == decrypt(password))
+
+        if (decrypt(target.get("password") as String) == decrypt(password)) {
+
             return Gson().toJson(Status.SUCCESS)
+        }
         return Gson().toJson(Status.FAIL)
     }
 
@@ -65,7 +68,13 @@ class LoginServices @Autowired constructor(
     fun encrypt(input: String) : String {
         val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
         val cipher = Cipher.getInstance(transformation)
-        val secretKey = SecretKeySpec(keyBytes.copyOf(16), algorithm)
+
+        val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
+            SecretKeySpec(keyBytes.copyOf(16), algorithm)
+        } else {
+            SecretKeySpec(keyBytes.copyOf(32), algorithm)
+        }
+
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
         val encryptedText = cipher.doFinal(input.toByteArray(Charsets.UTF_8))
@@ -75,7 +84,13 @@ class LoginServices @Autowired constructor(
     fun decrypt(input: String) : String {
         val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
         val cipher = Cipher.getInstance(transformation)
-        val secretKey = SecretKeySpec(keyBytes.copyOf(16), algorithm)
+
+        val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
+            SecretKeySpec(keyBytes.copyOf(16), algorithm)
+        } else {
+            SecretKeySpec(keyBytes.copyOf(32), algorithm)
+        }
+
         cipher.init(Cipher.DECRYPT_MODE, secretKey)
         val encryptedText = Base64.getDecoder().decode(input)
 
