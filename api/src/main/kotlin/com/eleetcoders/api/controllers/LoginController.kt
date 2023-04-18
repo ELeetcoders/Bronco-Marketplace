@@ -43,13 +43,24 @@ class LoginController constructor(
         return Gson().toJson(Status.SUCCESS)
     }
 
-    @GetMapping("sign-up")
-    fun signUpPage(@RequestBody loginCredentials : Map<String, String>) : String {
+    @PostMapping("sign-up")
+    fun signUpPage(@RequestBody loginCredentials : Map<String, String>,
+                   request: HttpServletRequest, response: HttpServletResponse) : String {
         val map = HashMap<String, String>(loginCredentials)
 
         map["password"] = loginServices.encrypt(map["password"] as String)
         val user = User(map)
 
-        return loginServices.createNewUser(user)
+        if(loginServices.createNewUser(user) == Gson().toJson(Status.FAIL))
+            return Gson().toJson(Status.FAIL)
+
+        val session = request.getSession(true)
+        session.setAttribute("email", user.email)
+
+        val cookie = Cookie("SESSION", session.id)
+        response.addCookie(cookie)
+
+        response.status = HttpStatus.OK.value()
+        return Gson().toJson(Status.SUCCESS)
     }
 }
