@@ -31,7 +31,7 @@ dependencies {
 	implementation("com.google.code.gson:gson:2.10.1")
 
 	implementation("com.google.firebase:firebase-admin:9.1.1")
-
+	implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 tasks.withType<KotlinCompile> {
