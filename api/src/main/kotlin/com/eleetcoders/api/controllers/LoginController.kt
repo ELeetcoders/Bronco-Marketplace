@@ -22,7 +22,7 @@ class LoginController constructor(
     val loginServices: LoginServices
 ){
 
-    @GetMapping("/sign-in")
+    @PostMapping("/sign-in")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
                   request : HttpServletRequest, response: HttpServletResponse) : String {
         val email = Gson().fromJson(loginCredentials["email"], String::class.java)

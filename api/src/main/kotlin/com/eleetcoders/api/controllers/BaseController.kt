@@ -3,10 +3,6 @@ package com.eleetcoders.api.controllers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.apache.tomcat.util.codec.binary.Base64
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -16,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.eleetcoders.api.services.ProductService
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.FirestoreClient
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/")
@@ -26,6 +23,12 @@ class BaseController {
 
     @GetMapping("/michael")
     fun michael(): String = "API endpoint made by Michael!"
+
+    @PostMapping("/authtest")
+    fun authtest(): String {
+        println("testtttt")
+        return "API endpoint should be accessible!"
+    }
 
     @GetMapping("/testdeploy")
     fun testdeploy(): String = "This API endpoint should be seen"
