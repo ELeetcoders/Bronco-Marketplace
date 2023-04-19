@@ -1,6 +1,11 @@
 package com.eleetcoders.api
 
+import jakarta.servlet.*
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -13,6 +18,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.stereotype.Component
+import java.io.IOException
 
 
 @Configuration
@@ -35,6 +41,14 @@ class SessionAuth {
     fun configure(auth: AuthenticationManagerBuilder) {
         auth.authenticationProvider(authProvider)
     }
+
+    @Bean
+    fun SessionFilterRegistrationBean(): FilterRegistrationBean<SessionFilter>? {
+        val registrationBean: FilterRegistrationBean<SessionFilter> = FilterRegistrationBean()
+        registrationBean.setFilter(SessionFilter())
+        registrationBean.addUrlPatterns("/michael", "/tyler")
+        return registrationBean
+    }
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain? {
@@ -43,10 +57,11 @@ class SessionAuth {
             .authorizeHttpRequests(
                 Customizer { authz ->
                     authz
-                        .requestMatchers("/michael").authenticated()
+                        .requestMatchers("/michael")
                     authz.anyRequest().permitAll()
                 }
             )
+      //      .addFilterBefore(SessionFilter(), RequestMatcher::class.java)
 //            .httpBasic(withDefaults())
 //            .formLogin()
             .csrf().disable()
@@ -54,6 +69,29 @@ class SessionAuth {
  //           .sessionAuthenticationStrategy(CookieSessionAuthenticationStrategy("JSESSIONID"))
             .sessionFixation().none()
         return http.build()
+    }
+}
+
+/* Maybe use this as a work around*/
+class SessionFilter : Filter {
+    @Throws(IOException::class, ServletException::class)
+    override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
+        println("theres no way")
+        val path: String = (request as? HttpServletRequest)?.requestURI ?: ""
+        val cookies: Array<Cookie> = (request as? HttpServletRequest)?.cookies ?: emptyArray()
+        println(path)
+        val sessionId: String? = cookies.find { it.name == "JSESSIONID" }?.value
+        println("JSESSIONID: $sessionId")
+        if ("/tyler".equals(path)) {  /* Testing */
+            val httpResponse: HttpServletResponse = response as HttpServletResponse
+            httpResponse.status = HttpServletResponse.SC_UNAUTHORIZED
+            httpResponse.writer.write("Unauthorized")
+            return
+        }
+        // Check for a valid session here
+        // If valid session, continue down chain
+        // Else return
+        chain.doFilter(request, response)
     }
 }
 
