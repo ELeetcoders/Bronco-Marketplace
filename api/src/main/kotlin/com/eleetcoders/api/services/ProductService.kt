@@ -13,15 +13,22 @@ import kotlin.collections.HashMap
 @Service
 class ProductService @Autowired constructor() {
 
-    fun getAllProducts(): String {
+    fun getAllProducts(categoryName: String? = null): String {
         val db: Firestore = FirestoreClient.getFirestore()
         val collections = db.listCollections()
+
         val products = HashMap<String, MutableList<Product>>()
 
         for (collection in collections) {
             val collectionName = collection.id
+
+            /* Do not include users. */
             if (collectionName == "user")
                 continue
+
+            /* If we specified a category, only return results from that one. */
+            if (categoryName != null && collectionName != categoryName) continue
+
             val temp = ArrayList<Product>()
             for (document in collection.get().get().documents) {
                 temp.add(dataToProduct(document.data, document.id, Product.ignoreCase(collectionName)))
@@ -32,16 +39,7 @@ class ProductService @Autowired constructor() {
     }
 
     fun getAllProductsByCategory(category: Product.Category): String {
-        val db: Firestore = FirestoreClient.getFirestore()
-        val collections = db.listCollections()
-        val products = mutableListOf<Product>()
-        for (collection in collections) {
-            if (collection.id == category.name)
-                for (document in collection.get().get().documents) {
-                    products.add(dataToProduct(document.data, document.id, Product.ignoreCase(collection.id)))
-            }
-        }
-        return Gson().toJson(products)
+        return getAllProducts(category.name)
     }
 
     fun filterByPrice(max: Double): String {
