@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.eleetcoders.api.services.ProductService
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.FirestoreClient
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -24,9 +26,16 @@ class BaseController {
     @GetMapping("/michael")
     fun michael(): String = "API endpoint made by Michael!"
 
-    @PostMapping("/authtest")
-    fun authtest(): String {
+    @GetMapping("/testlogin")
+    fun authtest(request : HttpServletRequest, response: HttpServletResponse): String {
         println("testtttt")
+        val session = request.getSession(true)
+        session.setAttribute("email", "watermelons@cpp.edu")
+        return "API endpoint should be accessible!"
+    }
+
+    @GetMapping("/cookietest")
+    fun cookietest(request : HttpServletRequest, response: HttpServletResponse): String {
         return "API endpoint should be accessible!"
     }
 

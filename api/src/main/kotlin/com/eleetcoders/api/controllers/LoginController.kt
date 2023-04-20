@@ -36,9 +36,6 @@ class LoginController constructor(
         val session = request.getSession(true)
         session.setAttribute("email", email)
 
-        val cookie = Cookie("SESSION", session.id)
-        response.addCookie(cookie)
-
         response.status = HttpStatus.OK.value()
         return Gson().toJson(Status.SUCCESS)
     }
@@ -55,10 +52,8 @@ class LoginController constructor(
             return Gson().toJson(Status.FAIL)
 
         val session = request.getSession(true)
+        session.maxInactiveInterval = 86400; //1 day session
         session.setAttribute("email", user.email)
-
-        val cookie = Cookie("SESSION", session.id)
-        response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
         return Gson().toJson(Status.SUCCESS)
