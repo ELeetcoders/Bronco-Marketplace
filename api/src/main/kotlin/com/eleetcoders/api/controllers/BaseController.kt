@@ -28,7 +28,7 @@ class BaseController {
 
     @GetMapping("/testlogin")
     fun authtest(request : HttpServletRequest, response: HttpServletResponse): String {
-        println("testtttt")
+        //println("testtttt")
         val session = request.getSession(true)
         session.setAttribute("email", "watermelons@cpp.edu")
         return "API endpoint should be accessible!"

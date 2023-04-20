@@ -62,24 +62,33 @@ class SessionAuth {
 class SessionFilter : Filter {
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
-        println("theres no way")
         val path: String = (request as? HttpServletRequest)?.requestURI ?: ""
         val cookies: Array<Cookie> = (request as? HttpServletRequest)?.cookies ?: emptyArray()
-        println(path)
         val sessionId: String? = cookies.find { it.name == "JSESSIONID" }?.value
         val session: HttpSession? = (request as? HttpServletRequest)?.getSession(false)
         val email: String? = session?.getAttribute("email") as? String
-        println("JSESSIONID: $sessionId")
-        println("Email mapped to session: $email")
-        if ("/tyler".equals(path)) {  /* Testing */
+
+        if (email.equals(null)) {
             val httpResponse: HttpServletResponse = response as HttpServletResponse
-            httpResponse.status = HttpServletResponse.SC_UNAUTHORIZED
-            httpResponse.writer.write("Unauthorized")
-            return
+                httpResponse.status = HttpServletResponse.SC_UNAUTHORIZED
+                httpResponse.writer.write("Unauthorized")
+                return
         }
+        else {
+            chain.doFilter(request, response)
+        }
+
+        //println("JSESSIONID: $sessionId")
+        //println("Email mapped to session: $email")
+        //if ("/tyler".equals(path)) {  /* Testing */
+        //    val httpResponse: HttpServletResponse = response as HttpServletResponse
+        //    httpResponse.status = HttpServletResponse.SC_UNAUTHORIZED
+        //    httpResponse.writer.write("Unauthorized")
+        //    return
+        //}
         // Check for a valid session here
         // If valid session, continue down chain
         // Else return
-        chain.doFilter(request, response)
+        //chain.doFilter(request, response)
     }
 }
