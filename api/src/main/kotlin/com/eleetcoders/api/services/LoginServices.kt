@@ -54,9 +54,9 @@ class LoginServices @Autowired constructor(
         val db = FirestoreClient.getFirestore()
         val userRef = db.collection("user").document(user.email)
 
-        if (userRef.get().get().exists() ||
-            user.email.length < 9 ||
-            user.email.substring(user.email.length-8) != "@cpp.edu")
+        val userService = UserService()
+
+        if (userRef.get().get().exists() || !userService.isValidEmail(user.email))
             return Gson().toJson(Status.FAIL)
 
         val data = mapOf<String, Any>("username" to user.userName, "password" to user.password,
