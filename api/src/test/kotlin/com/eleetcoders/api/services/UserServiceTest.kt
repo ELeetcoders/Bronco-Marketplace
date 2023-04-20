@@ -12,4 +12,13 @@ class UserServiceTest {
         assertEquals(userService.getEmailDomain("test123@"), null)
         assertEquals(userService.getEmailDomain("test123"), null)
     }
+
+    @Test
+    fun `cpp emails are allowed`() {
+        val userService = UserService()
+        assertEquals(userService.isValidEmail("test123@cpp.edu"), true)
+        assertEquals(userService.isValidEmail("cpp.edu"), false)
+        assertEquals(userService.isValidEmail("test123@sdsu.edu"), false)
+        assertEquals(userService.isValidEmail("test123"), false)
+    }
 }

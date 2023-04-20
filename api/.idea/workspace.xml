@@ -10,9 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebb1acd7-27ce-4dc1-8d6a-aa287a93d8e0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/kotlin/com/eleetcoders/api/services/UserServiceTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/eleetcoders/api/services/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/eleetcoders/api/services/UserService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/com/eleetcoders/api/services/UserServiceTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/com/eleetcoders/api/services/UserServiceTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +80,31 @@
       <recent name="com.eleetcoders.api.services" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.api [bootJar]">
+  <component name="RunManager" selected="Gradle.UserServiceTest.email domain is correct">
+    <configuration name="UserServiceTest.email domain is correct" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.eleetcoders.api.services.UserServiceTest.email domain is correct&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration name="api [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -117,10 +139,12 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.api [bootJar]" />
+      <item itemvalue="Gradle.UserServiceTest.email domain is correct" />
       <item itemvalue="Kotlin.ApiApplicationKt" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.UserServiceTest.email domain is correct" />
         <item itemvalue="Kotlin.ApiApplicationKt" />
       </list>
     </recent_temporary>
