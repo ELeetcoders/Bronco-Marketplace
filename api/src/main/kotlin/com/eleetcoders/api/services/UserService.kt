@@ -9,6 +9,30 @@ import com.google.gson.Gson
 
 class UserService {
 
+    /**
+     * Retrieves the domain of an email address.
+     *
+     * Example:
+     *   Input: test123@mydomain.com
+     *   Output: mydomain.com
+     *
+     * If no domain could be detected, return null.
+     *
+     * @param email The email address.
+     * @return The email domain, or null if not found.
+     */
+    private fun getEmailDomain(email: String): String? {
+        /* Fast validity check. */
+        if (!email.contains('@')) return null
+
+        val domain = email.split('@').last()
+
+        /* Ensure something comes after the @ symbol. */
+        if (domain.isEmpty()) return null
+
+        return domain
+    }
+
     fun createUser(user: User): String {
 
         val db = FirestoreClient.getFirestore()
