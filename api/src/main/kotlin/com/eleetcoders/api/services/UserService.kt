@@ -21,7 +21,7 @@ class UserService {
      * @param email The email address.
      * @return The email domain, or null if not found.
      */
-    private fun getEmailDomain(email: String): String? {
+    fun getEmailDomain(email: String): String? {
         /* Fast validity check. */
         if (!email.contains('@')) return null
 
