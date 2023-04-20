@@ -41,8 +41,6 @@ class SessionAuth {
         http
             .authorizeHttpRequests(
                 Customizer { authz ->
-                    authz
-                        .requestMatchers("/michael")
                     authz.anyRequest().permitAll()
                 }
             )
@@ -67,6 +65,10 @@ class SessionFilter : Filter {
         val sessionId: String? = cookies.find { it.name == "JSESSIONID" }?.value
         val session: HttpSession? = (request as? HttpServletRequest)?.getSession(false)
         val email: String? = session?.getAttribute("email") as? String
+
+        println("SessionId "+ sessionId)
+        println("email "+ email)
+        println("session "+ session)
 
         if (email.equals(null)) {
             val httpResponse: HttpServletResponse = response as HttpServletResponse

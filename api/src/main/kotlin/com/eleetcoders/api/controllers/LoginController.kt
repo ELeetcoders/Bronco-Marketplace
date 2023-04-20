@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpSession
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -55,7 +56,24 @@ class LoginController constructor(
         session.maxInactiveInterval = 86400; //1 day session
         session.setAttribute("email", user.email)
 
+        // Create a new JSESSIONID cookie with a custom maxAge value so it persists when user closes browser
+        val cookie = Cookie("JSESSIONID", session.id)
+        cookie.maxAge = 86400 // Set cookie maxAge to 1 day
+        response.addCookie(cookie)
+
         response.status = HttpStatus.OK.value()
         return Gson().toJson(Status.SUCCESS)
     }
+
+    @PostMapping("sign-out")
+    fun signout(request: HttpServletRequest, response: HttpServletResponse): String {
+        val session: HttpSession? = request.getSession(false)
+        if (session != null) {
+            session.invalidate() // Invalidate the session
+        }
+        return "Logged out!"
+    }
+
+
+
 }

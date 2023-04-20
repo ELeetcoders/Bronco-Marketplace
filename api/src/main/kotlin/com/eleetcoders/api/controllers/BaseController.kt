@@ -1,20 +1,18 @@
 package com.eleetcoders.api.controllers
 
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpSession
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.apache.tomcat.util.codec.binary.Base64
+import org.jsoup.Jsoup
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import org.jsoup.Jsoup
-import org.springframework.beans.factory.annotation.Autowired
-import com.eleetcoders.api.services.ProductService
-import com.google.cloud.firestore.Firestore
-import com.google.firebase.cloud.FirestoreClient
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/")
@@ -30,8 +28,24 @@ class BaseController {
     fun authtest(request : HttpServletRequest, response: HttpServletResponse): String {
         //println("testtttt")
         val session = request.getSession(true)
+        session.maxInactiveInterval = 86400; //1 day session
         session.setAttribute("email", "watermelons@cpp.edu")
+
+        // Create a new JSESSIONID cookie with a custom maxAge value so it persists when user closes browser
+        val cookie = Cookie("JSESSIONID", session.id)
+        cookie.maxAge = 86400 // Set cookie maxAge to 1 day
+        response.addCookie(cookie)
+
         return "API endpoint should be accessible!"
+    }
+
+    @GetMapping("/testlogout")
+    fun testlogout(request : HttpServletRequest, response: HttpServletResponse): String {
+        val session: HttpSession? = request.getSession(false)
+        if (session != null) {
+            session.invalidate() // Invalidate the session
+        }
+        return "Logged out!"
     }
 
     @GetMapping("/cookietest")
