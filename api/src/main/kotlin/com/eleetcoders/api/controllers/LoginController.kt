@@ -9,11 +9,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpSession
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/login")
@@ -24,6 +20,7 @@ class LoginController constructor(
 ){
 
     @PostMapping("/sign-in")
+    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
                   request : HttpServletRequest, response: HttpServletResponse) : String {
         val email = Gson().fromJson(loginCredentials["email"], String::class.java)
@@ -42,6 +39,7 @@ class LoginController constructor(
     }
 
     @PostMapping("sign-up")
+    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun signUpPage(@RequestBody loginCredentials : Map<String, String>,
                    request: HttpServletRequest, response: HttpServletResponse) : String {
         val map = HashMap<String, String>(loginCredentials)
@@ -66,6 +64,7 @@ class LoginController constructor(
     }
 
     @PostMapping("sign-out")
+    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun signout(request: HttpServletRequest, response: HttpServletResponse): String {
         val session: HttpSession? = request.getSession(false)
         if (session != null) {
