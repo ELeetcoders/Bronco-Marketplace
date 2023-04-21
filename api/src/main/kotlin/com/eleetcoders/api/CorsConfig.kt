@@ -13,7 +13,9 @@ class CorsConfiguration {
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
-        config.addAllowedOrigin("*")
+        //config.addAllowedOrigin("*")
+        config.addAllowedOrigin("http://broncomarketplace.com/")
+        config.addAllowedOrigin("http://localhost:4200/")
         config.addAllowedHeader("*")
         config.addAllowedMethod("OPTIONS")
         config.addAllowedMethod("HEAD")
