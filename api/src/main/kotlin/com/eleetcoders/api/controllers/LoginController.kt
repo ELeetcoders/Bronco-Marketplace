@@ -20,7 +20,7 @@ class LoginController constructor(
 ){
 
     @PostMapping("/sign-in")
-    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
+    @CrossOrigin(origins = ["http://localhost:4200/", "http://broncomarketplace.com/"], allowCredentials = "true")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
                   request : HttpServletRequest, response: HttpServletResponse) : String {
         val email = Gson().fromJson(loginCredentials["email"], String::class.java)
