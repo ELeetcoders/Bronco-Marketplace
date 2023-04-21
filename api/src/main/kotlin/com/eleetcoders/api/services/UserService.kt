@@ -9,7 +9,46 @@ import org.springframework.web.bind.annotation.RequestBody
 
 
 class UserService {
-    
+    companion object {
+        val ALLOWED_EMAIL_DOMAINS = arrayOf("cpp.edu")
+    }
+
+    /**
+     * Retrieves the domain of an email address.
+     *
+     * Example:
+     *   Input: test123@mydomain.com
+     *   Output: mydomain.com
+     *
+     * If no domain could be detected, return null.
+     *
+     * @param email The email address.
+     * @return The email domain, or null if not found.
+     */
+    fun getEmailDomain(email: String): String? {
+        /* Fast validity check. */
+        if (!email.contains('@')) return null
+
+        val domain = email.split('@').last()
+
+        /* Ensure something comes after the @ symbol. */
+        if (domain.isEmpty()) return null
+
+        return domain
+    }
+
+    /**
+     * Returns true if the email is valid.
+     *
+     * @param email The email address.
+     * @return True if the email address is valid, false otherwise.
+     */
+    fun isValidEmail(email: String): Boolean {
+        val emailDomain = getEmailDomain(email) ?: return false
+
+        /* Ensure domain is allowed. */
+        return ALLOWED_EMAIL_DOMAINS.contains(emailDomain)
+    }
 
     fun deleteUser(user: User) : String {
         val db = FirestoreClient.getFirestore()
