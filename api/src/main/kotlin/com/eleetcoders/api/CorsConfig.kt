@@ -17,6 +17,7 @@ class CorsConfiguration {
         config.addAllowedOrigin("http://broncomarketplace.com")
         config.addAllowedOrigin("http://localhost:4200")
         config.addAllowedHeader("*")
+        config.allowCredentials = true;
         config.addAllowedMethod("OPTIONS")
         config.addAllowedMethod("HEAD")
         config.addAllowedMethod("GET")
