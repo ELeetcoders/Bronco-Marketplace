@@ -20,7 +20,7 @@ class LoginController constructor(
 ){
 
     @PostMapping("/sign-in")
-    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
+    //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
                   request : HttpServletRequest, response: HttpServletResponse) : String {
         val email = Gson().fromJson(loginCredentials["email"], String::class.java)
@@ -35,11 +35,12 @@ class LoginController constructor(
         session.setAttribute("email", email)
 
         response.status = HttpStatus.OK.value()
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=None; Secure");
         return Gson().toJson(Status.SUCCESS)
     }
 
     @PostMapping("sign-up")
-    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
+    //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun signUpPage(@RequestBody loginCredentials : Map<String, String>,
                    request: HttpServletRequest, response: HttpServletResponse) : String {
         val map = HashMap<String, String>(loginCredentials)
@@ -60,11 +61,12 @@ class LoginController constructor(
         response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=None; Secure");
         return Gson().toJson(Status.SUCCESS)
     }
 
     @PostMapping("sign-out")
-    @CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
+    //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun signout(request: HttpServletRequest, response: HttpServletResponse): String {
         val session: HttpSession? = request.getSession(false)
         if (session != null) {
