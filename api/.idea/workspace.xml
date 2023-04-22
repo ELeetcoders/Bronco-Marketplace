@@ -10,11 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebb1acd7-27ce-4dc1-8d6a-aa287a93d8e0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/kotlin/com/eleetcoders/api/services/UserServiceTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/eleetcoders/api/services/ProductService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/eleetcoders/api/services/ProductService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/eleetcoders/api/services/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/eleetcoders/api/services/UserService.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
