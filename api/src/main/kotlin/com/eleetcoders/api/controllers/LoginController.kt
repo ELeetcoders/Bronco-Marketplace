@@ -35,11 +35,7 @@ class LoginController constructor(
         session.setAttribute("email", email)
 
         response.status = HttpStatus.OK.value()
-        if (request.isSecure()) {
-            response.addHeader("Set-Cookie", "cookie_name=cookie_value; SameSite=None; Secure");
-        } else {
-            response.addHeader("Set-Cookie", "cookie_name=cookie_value; SameSite=None;");
-        }
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=None; Secure");
         return Gson().toJson(Status.SUCCESS)
     }
 
@@ -65,11 +61,7 @@ class LoginController constructor(
         response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
-        if (request.isSecure()) {
-            response.addHeader("Set-Cookie", "cookie_name=cookie_value; SameSite=None; Secure");
-        } else {
-            response.addHeader("Set-Cookie", "cookie_name=cookie_value; SameSite=None;");
-        }
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=None; Secure");
         return Gson().toJson(Status.SUCCESS)
     }
 
