@@ -35,7 +35,7 @@ class LoginController constructor(
         session.setAttribute("email", email)
 
         response.status = HttpStatus.OK.value()
-        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Domain=.broncomarketplace.com; SameSite=None;")
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Domain=.broncomarketplace.com; SameSite=Lax;")
         return Gson().toJson(Status.SUCCESS)
     }
 
