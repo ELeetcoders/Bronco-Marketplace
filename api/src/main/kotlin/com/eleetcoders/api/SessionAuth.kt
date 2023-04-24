@@ -31,7 +31,7 @@ class SessionAuth {
     fun SessionFilterRegistrationBean(): FilterRegistrationBean<SessionFilter>? {
         val registrationBean: FilterRegistrationBean<SessionFilter> = FilterRegistrationBean()
         registrationBean.setFilter(SessionFilter())
-        registrationBean.addUrlPatterns("/michael", "/tyler")
+        registrationBean.addUrlPatterns("/michael", "/tyler", "/login/verify")
         return registrationBean
     }
     @Bean

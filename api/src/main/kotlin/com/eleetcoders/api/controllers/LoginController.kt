@@ -19,6 +19,13 @@ class LoginController constructor(
     val loginServices: LoginServices
 ){
 
+    @GetMapping("/verify")
+    fun verify(request : HttpServletRequest, response: HttpServletResponse) : String {
+        val session = request.getSession(false)
+        val email: String? = session?.getAttribute("email") as? String
+        return Gson().toJson(email)
+    }
+
     @PostMapping("/sign-in")
     //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
