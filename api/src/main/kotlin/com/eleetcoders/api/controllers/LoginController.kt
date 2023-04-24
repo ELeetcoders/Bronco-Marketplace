@@ -84,7 +84,7 @@ class LoginController constructor(
         //cookie.maxAge = 0
         //cookie.path = "/"
         //response.addCookie(cookie)
-        return "Logged out!"
+        return Gson().toJson(Status.SUCCESS)
     }
 
 
