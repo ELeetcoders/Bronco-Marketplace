@@ -68,7 +68,7 @@ class LoginController constructor(
         response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
-        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=None; Secure");
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=Lax;");
         return Gson().toJson(Status.SUCCESS)
     }
 
@@ -77,12 +77,13 @@ class LoginController constructor(
     fun signout(request: HttpServletRequest, response: HttpServletResponse): String {
         val session: HttpSession? = request.getSession(false)
         if (session != null) {
+            response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=0")
             session.invalidate() // Invalidate the session
         }
-        val cookie = Cookie("JSESSIONID", "") // Replace "cookieName" with the name of your cookie
-        cookie.maxAge = 0
-        cookie.path = "/"
-        response.addCookie(cookie)
+        //val cookie = Cookie("JSESSIONID", "") // Replace "cookieName" with the name of your cookie
+        //cookie.maxAge = 0
+        //cookie.path = "/"
+        //response.addCookie(cookie)
         return "Logged out!"
     }
 

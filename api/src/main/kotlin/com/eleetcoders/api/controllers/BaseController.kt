@@ -45,6 +45,10 @@ class BaseController {
         if (session != null) {
             session.invalidate() // Invalidate the session
         }
+        val cookie = Cookie("JSESSIONID", "") // Replace "cookieName" with the name of your cookie
+        cookie.maxAge = 0
+        cookie.path = "/"
+        response.addCookie(cookie)
         return "Logged out!"
     }
 
