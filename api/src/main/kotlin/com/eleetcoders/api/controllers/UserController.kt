@@ -33,7 +33,7 @@ class UserController constructor(
         val user = getObj<User>(data, "user")
         val name = data.getOrDefault("name", "") as String
         val category = Product.ignoreCase(data.getOrDefault("category", "") as String)
-        val price = data.getOrDefault("price", -1.0) as String
+        val price = data.getOrDefault("price", "-1.0") as String
         val desc = data.getOrDefault("desc", "") as String
         val imageUrl = data.getOrDefault("imageUrl", "") as String
 
