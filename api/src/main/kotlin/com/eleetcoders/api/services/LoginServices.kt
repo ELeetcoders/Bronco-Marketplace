@@ -52,12 +52,21 @@ class LoginServices @Autowired constructor(
 
     fun createNewUser(user : User): String {
         val db = FirestoreClient.getFirestore()
-        val userRef = db.collection("user").document(user.email)
+        val allUsers = db.collection("user")
+        val userRef = allUsers.document(user.email)
 
         val userService = UserService()
 
         if (userRef.get().get().exists() || !userService.isValidEmail(user.email))
             return Gson().toJson(Status.FAIL)
+
+        for (userReference in db.collection("user").get().get().documents) {
+            if (user.userName.lowercase(Locale.getDefault()) ==
+                (userReference.get("username") as String).lowercase(Locale.getDefault()))
+            {
+                return Gson().toJson(Status.FAIL)
+            }
+        }
 
         val data = mapOf<String, Any>("username" to user.userName, "password" to user.password,
             "firstname" to user.firstname, "lastname" to user.lastname)
@@ -66,14 +75,8 @@ class LoginServices @Autowired constructor(
     }
 
     fun encrypt(input: String) : String {
-        val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+        val secretKey = getBytes()
         val cipher = Cipher.getInstance(transformation)
-
-        val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
-            SecretKeySpec(keyBytes.copyOf(16), algorithm)
-        } else {
-            SecretKeySpec(keyBytes.copyOf(32), algorithm)
-        }
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
@@ -82,8 +85,18 @@ class LoginServices @Autowired constructor(
     }
 
     fun decrypt(input: String) : String {
-        val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+        val secretKey = getBytes()
         val cipher = Cipher.getInstance(transformation)
+
+        cipher.init(Cipher.DECRYPT_MODE, secretKey)
+        val encryptedText = Base64.getDecoder().decode(input)
+
+        val decryptedText = cipher.doFinal(encryptedText)
+        return String(decryptedText)
+    }
+
+    private fun getBytes() : SecretKeySpec {
+        val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
 
         val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
             SecretKeySpec(keyBytes.copyOf(16), algorithm)
@@ -91,10 +104,6 @@ class LoginServices @Autowired constructor(
             SecretKeySpec(keyBytes.copyOf(32), algorithm)
         }
 
-        cipher.init(Cipher.DECRYPT_MODE, secretKey)
-        val encryptedText = Base64.getDecoder().decode(input)
-
-        val decryptedText = cipher.doFinal(encryptedText)
-        return String(decryptedText)
+        return secretKey
     }
 }
