@@ -62,7 +62,7 @@ class LoginController constructor(val loginServices: LoginServices){
         response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
-        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; SameSite=Lax;");
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax;");
         return Gson().toJson(Status.SUCCESS)
     }
 
