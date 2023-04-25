@@ -31,7 +31,7 @@ class UserController constructor(
 
     @PostMapping("/create-listing")
     fun createListing(@RequestBody data : Map<String, Any>, request : HttpServletRequest) : Boolean {
-        val user = getObj<User>(data, "user")
+        //val user = getObj<User>(data, "user")
         val name = data.getOrDefault("name", "") as String
         val category = Product.ignoreCase(data.getOrDefault("category", "") as String)
         val price = data.getOrDefault("price", "-1.0") as String
