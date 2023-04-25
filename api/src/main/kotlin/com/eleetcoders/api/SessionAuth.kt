@@ -60,6 +60,7 @@ class SessionFilter : Filter {
         val session: HttpSession? = (request as? HttpServletRequest)?.getSession(false)
         val email: String? = session?.getAttribute("email") as? String
 
+        println("Request" + request)
         println("SessionId "+ sessionId)
         println("email "+ email)
         println("session "+ session)
