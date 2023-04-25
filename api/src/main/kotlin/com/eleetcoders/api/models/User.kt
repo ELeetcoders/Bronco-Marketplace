@@ -19,7 +19,6 @@ class User @JsonCreator constructor(
         return password == ps
     }
 
-
     override fun toString(): String {
         return Gson().toJson(this)
     }

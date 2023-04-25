@@ -24,7 +24,6 @@ import java.io.IOException
 
 
 @Configuration
-//@EnableWebSecurity  //i tried using this but still nothing
 class SessionAuth {
 
     @Bean
@@ -44,13 +43,8 @@ class SessionAuth {
                     authz.anyRequest().permitAll()
                 }
             )
-      //      .addFilterBefore(SessionFilter(), RequestMatcher::class.java)
-//            .httpBasic(withDefaults())
-//            .formLogin()
             .csrf().disable()
             .sessionManagement()
-  //              .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  //this controls the JSESSIONID
- //           .sessionAuthenticationStrategy(CookieSessionAuthenticationStrategy("JSESSIONID"))
             .sessionFixation().none()
         return http.build()
     }
@@ -79,18 +73,5 @@ class SessionFilter : Filter {
         else {
             chain.doFilter(request, response)
         }
-
-        //println("JSESSIONID: $sessionId")
-        //println("Email mapped to session: $email")
-        //if ("/tyler".equals(path)) {  /* Testing */
-        //    val httpResponse: HttpServletResponse = response as HttpServletResponse
-        //    httpResponse.status = HttpServletResponse.SC_UNAUTHORIZED
-        //    httpResponse.writer.write("Unauthorized")
-        //    return
-        //}
-        // Check for a valid session here
-        // If valid session, continue down chain
-        // Else return
-        //chain.doFilter(request, response)
     }
 }

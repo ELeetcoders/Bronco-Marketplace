@@ -13,11 +13,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/login")
-class LoginController constructor(
-    // TODO: Create Login Page
-    // TODO: Check if name exists within system
-    val loginServices: LoginServices
-){
+class LoginController constructor(val loginServices: LoginServices){
 
     @GetMapping("/verify")
     fun verify(request : HttpServletRequest, response: HttpServletResponse) : String {
@@ -27,7 +23,6 @@ class LoginController constructor(
     }
 
     @PostMapping("/sign-in")
-    //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
                   request : HttpServletRequest, response: HttpServletResponse) : String {
         val email = Gson().fromJson(loginCredentials["email"], String::class.java)
@@ -47,7 +42,6 @@ class LoginController constructor(
     }
 
     @PostMapping("sign-up")
-    //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun signUpPage(@RequestBody loginCredentials : Map<String, String>,
                    request: HttpServletRequest, response: HttpServletResponse) : String {
         val map = HashMap<String, String>(loginCredentials)
@@ -73,17 +67,13 @@ class LoginController constructor(
     }
 
     @PostMapping("sign-out")
-    //@CrossOrigin(origins = ["http://localhost:4200", "http://broncomarketplace.com"], allowCredentials = "true")
     fun signout(request: HttpServletRequest, response: HttpServletResponse): String {
         val session: HttpSession? = request.getSession(false)
         if (session != null) {
             response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=0")
             session.invalidate() // Invalidate the session
         }
-        //val cookie = Cookie("JSESSIONID", "") // Replace "cookieName" with the name of your cookie
-        //cookie.maxAge = 0
-        //cookie.path = "/"
-        //response.addCookie(cookie)
+        
         return Gson().toJson(Status.SUCCESS)
     }
 

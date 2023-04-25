@@ -13,7 +13,6 @@ class CorsConfiguration {
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
-        //config.addAllowedOrigin("*")
         config.addAllowedOrigin("http://broncomarketplace.com")
         config.addAllowedOrigin("https://broncomarketplace.com")
         config.addAllowedOrigin("http://localhost:4200")
