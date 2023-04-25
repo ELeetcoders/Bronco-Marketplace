@@ -44,7 +44,7 @@ class SessionAuth {
                 }
             )
             .csrf().disable()
-            .sessionManagement()
+//            .sessionManagement()
 //            .sessionFixation().none()
         return http.build()
     }
