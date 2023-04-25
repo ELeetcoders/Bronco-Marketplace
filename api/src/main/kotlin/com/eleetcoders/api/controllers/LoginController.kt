@@ -34,10 +34,11 @@ class LoginController constructor(val loginServices: LoginServices){
             return Gson().toJson(Status.FAIL)
 
         val session = request.getSession(true)
+        session.maxInactiveInterval = 86400; //1 day session
         session.setAttribute("email", email)
 
         response.status = HttpStatus.OK.value()
-        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax;")
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400")
         return Gson().toJson(Status.SUCCESS)
     }
 
@@ -57,12 +58,12 @@ class LoginController constructor(val loginServices: LoginServices){
         session.setAttribute("email", user.email)
 
         // Create a new JSESSIONID cookie with a custom maxAge value so it persists when user closes browser
-        val cookie = Cookie("JSESSIONID", session.id)
-        cookie.maxAge = 86400 // Set cookie maxAge to 1 day
-        response.addCookie(cookie)
+//        val cookie = Cookie("JSESSIONID", session.id)
+//        cookie.maxAge = 86400 // Set cookie maxAge to 1 day
+//        response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
-        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax;");
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
         return Gson().toJson(Status.SUCCESS)
     }
 
