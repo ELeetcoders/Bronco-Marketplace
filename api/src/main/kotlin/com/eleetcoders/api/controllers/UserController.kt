@@ -38,11 +38,6 @@ class UserController constructor(
         val desc = data.getOrDefault("desc", "") as String
         val imageUrl = data.getOrDefault("imageUrl", "") as String
 
-        /* No request passed; needed for session! */
-        if (request == null) {
-            return false
-        }
-
         val session = request.getSession(false)
         val email: String = session.getAttribute("email") as String
 
