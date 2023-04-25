@@ -35,9 +35,9 @@ class UserController constructor(
         val category = Product.ignoreCase(data.getOrDefault("category", "") as String)
         val price = data.getOrDefault("price", -1.0) as String
         val desc = data.getOrDefault("desc", "") as String
-        val imageURL = data.getOrDefault("imageURL", "") as String
+        val imageUrl = data.getOrDefault("imageUrl", "") as String
 
-        return userService.createListing(user, name, desc, price.toDouble(), category, imageURL)
+        return userService.createListing(user, name, desc, price.toDouble(), category, imageUrl)
     }
 
     @PostMapping("/remove-listing")
