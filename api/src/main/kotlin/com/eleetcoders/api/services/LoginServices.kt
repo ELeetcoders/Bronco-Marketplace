@@ -22,8 +22,10 @@ import javax.crypto.spec.SecretKeySpec
 @Service
 class LoginServices @Autowired constructor(
 ){
-    val algorithm: String = "AES"
-    val transformation : String = "AES/ECB/PKCS5Padding"
+    companion object {
+        const val ALGORITHM: String = "AES"
+        const val TRANSFORMATION : String = "AES/ECB/PKCS5Padding"
+    }
 
     fun checkCredentials(email : String, password : String) : String {
         val firebase = FirestoreClient.getFirestore()
@@ -44,9 +46,9 @@ class LoginServices @Autowired constructor(
 
 
         if (decrypt(target.get("password") as String) == decrypt(password)) {
-
             return Gson().toJson(Status.SUCCESS)
         }
+
         return Gson().toJson(Status.FAIL)
     }
 
@@ -67,12 +69,12 @@ class LoginServices @Autowired constructor(
 
     fun encrypt(input: String) : String {
         val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
-        val cipher = Cipher.getInstance(transformation)
+        val cipher = Cipher.getInstance(TRANSFORMATION)
 
         val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
-            SecretKeySpec(keyBytes.copyOf(16), algorithm)
+            SecretKeySpec(keyBytes.copyOf(16), ALGORITHM)
         } else {
-            SecretKeySpec(keyBytes.copyOf(32), algorithm)
+            SecretKeySpec(keyBytes.copyOf(32), ALGORITHM)
         }
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
@@ -83,12 +85,12 @@ class LoginServices @Autowired constructor(
 
     fun decrypt(input: String) : String {
         val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
-        val cipher = Cipher.getInstance(transformation)
+        val cipher = Cipher.getInstance(TRANSFORMATION)
 
         val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
-            SecretKeySpec(keyBytes.copyOf(16), algorithm)
+            SecretKeySpec(keyBytes.copyOf(16), ALGORITHM)
         } else {
-            SecretKeySpec(keyBytes.copyOf(32), algorithm)
+            SecretKeySpec(keyBytes.copyOf(32), ALGORITHM)
         }
 
         cipher.init(Cipher.DECRYPT_MODE, secretKey)
