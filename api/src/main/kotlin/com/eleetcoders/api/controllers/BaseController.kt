@@ -18,5 +18,5 @@ import javax.crypto.spec.SecretKeySpec
 @RequestMapping("/")
 class BaseController {
     @GetMapping
-    fun base(): String = "This is our API for the bronco marketplace!"
+    fun base(): String = "Pong!"
 }
