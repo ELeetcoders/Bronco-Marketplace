@@ -1,5 +1,6 @@
 package com.eleetcoders.api.controllers
 
+import assertAuthenticated
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
@@ -31,6 +32,8 @@ class UserController constructor(
 
     @PostMapping("/create-listing")
     fun createListing(@RequestBody data : Map<String, Any>, request : HttpServletRequest) : Boolean {
+        if (!assertAuthenticated(request)) return false;
+        
         //val user = getObj<User>(data, "user")
         val name = data.getOrDefault("name", "") as String
         val category = Product.ignoreCase(data.getOrDefault("category", "") as String)
@@ -45,7 +48,8 @@ class UserController constructor(
     }
 
     @PostMapping("/remove-listing")
-    fun removeListing(@RequestBody product: Product) : String {
+    fun removeListing(@RequestBody product: Product, request : HttpServletRequest) : String {
+        if (!assertAuthenticated(request)) return "";
         return userService.removeListing(product)
     }
 }

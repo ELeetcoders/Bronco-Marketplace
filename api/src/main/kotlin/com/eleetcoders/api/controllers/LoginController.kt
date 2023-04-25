@@ -1,5 +1,6 @@
 package com.eleetcoders.api.controllers
 
+import assertAuthenticated
 import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
 import com.eleetcoders.api.services.LoginServices
@@ -17,6 +18,7 @@ class LoginController constructor(val loginServices: LoginServices){
 
     @GetMapping("/verify")
     fun verify(request : HttpServletRequest, response: HttpServletResponse) : String {
+        if (!assertAuthenticated(request)) return "";
         val session = request.getSession(false)
         val email: String? = session?.getAttribute("email") as? String
         return Gson().toJson(email)
@@ -68,6 +70,8 @@ class LoginController constructor(val loginServices: LoginServices){
 
     @PostMapping("sign-out")
     fun signout(request: HttpServletRequest, response: HttpServletResponse): String {
+        if (!assertAuthenticated(request)) return "";
+        
         val session: HttpSession? = request.getSession(false)
         if (session != null) {
             response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=0")
