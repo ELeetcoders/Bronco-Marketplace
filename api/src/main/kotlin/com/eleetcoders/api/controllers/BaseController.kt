@@ -19,4 +19,22 @@ import javax.crypto.spec.SecretKeySpec
 class BaseController {
     @GetMapping
     fun base(): String = "Pong!"
+
+    @PostMapping("/test")
+    fun test(req: HttpServletRequest): String {
+        val cookies: Array<Cookie> = req.cookies ?: emptyArray()
+        cookies.forEach { cookie ->
+            println("${cookie.name}=${cookie.value}")
+        }
+        return "Hello World"
+    }
+
+    @PostMapping("/test2")
+    fun test2(req: HttpServletRequest): String {
+        val cookies: Array<Cookie> = req.cookies ?: emptyArray()
+        cookies.forEach { cookie ->
+            println("${cookie.name}=${cookie.value}")
+        }
+        return "test2"
+    }
 }

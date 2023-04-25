@@ -5,21 +5,12 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpSession
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.AuthenticationProvider
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.Customizer
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.stereotype.Component
 import java.io.IOException
 
 
@@ -30,7 +21,7 @@ class SessionAuth {
     fun SessionFilterRegistrationBean(): FilterRegistrationBean<SessionFilter>? {
         val registrationBean: FilterRegistrationBean<SessionFilter> = FilterRegistrationBean()
         registrationBean.setFilter(SessionFilter())
-        registrationBean.addUrlPatterns("/login/verify")
+        registrationBean.addUrlPatterns("/login/verify", "/user/create-listing")
         return registrationBean
     }
     @Bean
@@ -53,17 +44,31 @@ class SessionAuth {
 /* Maybe use this as a work around*/
 class SessionFilter : Filter {
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
-        val path: String = (request as? HttpServletRequest)?.requestURI ?: ""
-        val cookies: Array<Cookie> = (request as? HttpServletRequest)?.cookies ?: emptyArray()
+    override fun doFilter(req: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
+        val request = req as HttpServletRequest
+        if (request.method == "OPTIONS") {
+            chain.doFilter(request, response)
+        }
+        val path: String = request.requestURI ?: ""
+        val cookies: Array<Cookie> = request.cookies ?: emptyArray()
         val sessionId: String? = cookies.find { it.name == "JSESSIONID" }?.value
-        val session: HttpSession? = (request as? HttpServletRequest)?.getSession(false)
+        val session: HttpSession? = request.getSession(false)
         val email: String? = session?.getAttribute("email") as? String
 
-        println("Request" + request)
-        println("SessionId "+ sessionId)
-        println("email "+ email)
-        println("session "+ session)
+//        if (cookies.size == 0) {
+//            println("no cookies")
+//        }
+//        cookies.forEach { cookie ->
+//            println("FILTER: ${cookie.name}=${cookie.value}")
+//        }
+//
+//        val cookieHeader = request.getHeader("Cookie")
+//        println("Cookie header: " + cookieHeader)
+//        chain.doFilter(request, response)
+        //println("Request" + request)
+        //println("SessionId "+ sessionId)
+        //println("email "+ email)
+        //println("session "+ session)
 
         if (email.equals(null)) {
             val httpResponse: HttpServletResponse = response as HttpServletResponse
