@@ -21,7 +21,7 @@ class SessionAuth {
     fun SessionFilterRegistrationBean(): FilterRegistrationBean<SessionFilter>? {
         val registrationBean: FilterRegistrationBean<SessionFilter> = FilterRegistrationBean()
         registrationBean.setFilter(SessionFilter())
-        registrationBean.addUrlPatterns("/login/verify", "/user/create-listing")
+        registrationBean.addUrlPatterns("/login/verify", "/test", "/test2", "/user/create-listing")
         return registrationBean
     }
     @Bean
@@ -45,26 +45,24 @@ class SessionAuth {
 class SessionFilter : Filter {
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(req: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
+        println("filter called")
         val request = req as HttpServletRequest
         if (request.method == "OPTIONS") {
+            println("options")
             chain.doFilter(request, response)
+            return
         }
         val path: String = request.requestURI ?: ""
         val cookies: Array<Cookie> = request.cookies ?: emptyArray()
         val sessionId: String? = cookies.find { it.name == "JSESSIONID" }?.value
         val session: HttpSession? = request.getSession(false)
         val email: String? = session?.getAttribute("email") as? String
-
-//        if (cookies.size == 0) {
-//            println("no cookies")
-//        }
-//        cookies.forEach { cookie ->
-//            println("FILTER: ${cookie.name}=${cookie.value}")
-//        }
-//
-//        val cookieHeader = request.getHeader("Cookie")
-//        println("Cookie header: " + cookieHeader)
-//        chain.doFilter(request, response)
+        if (cookies.size == 0) {
+            println("no cookies")
+        }
+        cookies.forEach { cookie ->
+            println("FILTER: ${cookie.name}=${cookie.value}")
+        }
         //println("Request" + request)
         //println("SessionId "+ sessionId)
         //println("email "+ email)

@@ -29,7 +29,7 @@ class BaseController {
         return "Hello World"
     }
 
-    @PostMapping("/test2")
+    @GetMapping("/test2")
     fun test2(req: HttpServletRequest): String {
         val cookies: Array<Cookie> = req.cookies ?: emptyArray()
         cookies.forEach { cookie ->
