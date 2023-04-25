@@ -5,6 +5,7 @@ import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
 import com.eleetcoders.api.services.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -29,7 +30,7 @@ class UserController constructor(
     }
 
     @PostMapping("/create-listing")
-    fun createListing(@RequestBody data : Map<String, Any>) : Boolean {
+    fun createListing(@RequestBody data : Map<String, Any>, request : HttpServletRequest) : Boolean {
         val user = getObj<User>(data, "user")
         val name = data.getOrDefault("name", "") as String
         val category = Product.ignoreCase(data.getOrDefault("category", "") as String)
@@ -37,7 +38,15 @@ class UserController constructor(
         val desc = data.getOrDefault("desc", "") as String
         val imageUrl = data.getOrDefault("imageUrl", "") as String
 
-        return userService.createListing(user, name, desc, price.toDouble(), category, imageUrl)
+        /* No request passed; needed for session! */
+        if (request == null) {
+            return false
+        }
+
+        val session = request.getSession(false)
+        val email: String = session.getAttribute("email") as String
+
+        return userService.createListing(email, name, desc, price.toDouble(), category, imageUrl)
     }
 
     @PostMapping("/remove-listing")
