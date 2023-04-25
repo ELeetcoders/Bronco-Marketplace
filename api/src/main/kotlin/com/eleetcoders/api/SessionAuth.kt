@@ -53,7 +53,7 @@ class SessionAuth {
 /* Maybe use this as a work around*/
 class SessionFilter : Filter {
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain) {
+    override fun doFilter(request: HttpServletRequest?, response: HttpServletResponse?, chain: FilterChain) {
         val path: String = (request as? HttpServletRequest)?.requestURI ?: ""
         val cookies: Array<Cookie> = (request as? HttpServletRequest)?.cookies ?: emptyArray()
         val sessionId: String? = cookies.find { it.name == "JSESSIONID" }?.value
