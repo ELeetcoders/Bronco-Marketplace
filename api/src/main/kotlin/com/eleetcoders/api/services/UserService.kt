@@ -87,7 +87,7 @@ class UserService {
         return Gson().toJson(productList)
     }
 
-    fun createListing(email: String, name: String, desc: String, price: Double,
+    fun createListing(email: String, firstname: String, lastname: String, username: String, name: String, desc: String, price: Double,
                       category: Product.Category, imageURL: String) : Boolean {
 
         if (price < 0 ||
@@ -95,8 +95,16 @@ class UserService {
             return false
 
         val db = FirestoreClient.getFirestore()
-        val data = mutableMapOf<String, Any>("name" to name, "desc" to desc,
-            "price" to price, "email" to email, "imageUrl" to imageURL)
+        val data = mutableMapOf<String, Any>(
+            "name" to name,
+            "desc" to desc,
+            "price" to price,
+            "email" to email,
+            "firstname" to firstname,
+            "lastname" to lastname,
+            "username" to username,
+            "imageUrl" to imageURL
+        )
         val docId = db.collection(category.name).add(data).get().id
         return db.collection(category.name).document(docId).get().get().exists()
     }

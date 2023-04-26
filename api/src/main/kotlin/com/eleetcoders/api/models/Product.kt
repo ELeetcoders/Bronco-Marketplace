@@ -14,6 +14,9 @@ class Product @JsonCreator constructor(
     @JsonProperty("name") val name: String = "",
     @JsonProperty("price") val price: Double = -1.0,
     @JsonProperty("email") val email: String = "",
+    @JsonProperty("firstname") val firstName: String = "",
+    @JsonProperty("lastname") val lastName: String = "",
+    @JsonProperty("username") val username: String = "",
     @JsonProperty("desc") val desc: String = "",
     @JsonProperty("imageUrl") val imageUrl: String = "",
 
