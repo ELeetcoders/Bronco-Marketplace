@@ -40,8 +40,11 @@ class UserController constructor(
 
         val session = request.getSession(false)
         val email: String = session.getAttribute("email") as String
+        val firstname: String = session.getAttribute("firstname") as String
+        val lastname: String = session.getAttribute("lastname") as String
+        val username: String = session.getAttribute("username") as String
 
-        return userService.createListing(email, name, desc, price.toDouble(), category, imageUrl)
+        return userService.createListing(email, firstname, lastname, username, name, desc, price.toDouble(), category, imageUrl)
     }
 
     @PostMapping("/remove-listing")
