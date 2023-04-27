@@ -80,7 +80,9 @@ class UserService {
                 val data = document.get().get().data
 
                 if (data?.get("email") == email) {
-                    productList.add(data)
+                    val productData = HashMap(data) // create a new HashMap with the existing data
+                    productData["id"] = document.id // add a new key-value pair for the document id
+                    productList.add(productData)
                 }
             }
         }
