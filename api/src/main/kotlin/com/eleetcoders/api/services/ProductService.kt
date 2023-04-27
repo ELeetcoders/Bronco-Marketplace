@@ -23,7 +23,7 @@ class ProductService @Autowired constructor() {
             val collectionName = collection.id
 
             /* Do not include users. */
-            if (collectionName == "user")
+            if (collectionName == "user" || collection.id == "chats")
                 continue
 
             /* If we specified a category, only return results from that one. */
@@ -47,7 +47,7 @@ class ProductService @Autowired constructor() {
         val collections = db.listCollections()
         val data = HashMap<String, ArrayList<Product>>()
         for (collection in collections) {
-            if (collection.id == "user")
+            if (collection.id == "user" || collection.id == "chats")
                 continue
             val list = ArrayList<Product>()
             for (document in collection.get().get().documents) {
@@ -68,7 +68,7 @@ class ProductService @Autowired constructor() {
 
         for (collection in collections) {
             val collectionName = collection.id
-            if (collectionName == "user") continue
+            if (collectionName == "user" || collectionName == "chats") continue
 
             val productList = ArrayList<Product>()
 
@@ -90,7 +90,7 @@ class ProductService @Autowired constructor() {
         val products = HashMap<String, ArrayList<Map<String, Any>>>()
         for (collection in collections) {
             val collectionName = collection.id
-            if (collectionName == "user")
+            if (collectionName == "user" || collectionName == "chats")
                 continue
             val temp = ArrayList<Map<String,Any>>()
             for (document in collection.get().get().documents) {

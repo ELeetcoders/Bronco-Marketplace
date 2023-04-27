@@ -74,7 +74,7 @@ class UserService {
         val productList = ArrayList<Map<String, Any>>()
 
         for (collection in collectionRef) {
-            if (collection.id == "user")
+            if (collection.id == "user" || collection.id == "chats")
                 continue
             for (document in collection.listDocuments())  {
                 val data = document.get().get().data
