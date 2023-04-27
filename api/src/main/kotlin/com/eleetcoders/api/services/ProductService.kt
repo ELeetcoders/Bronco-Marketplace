@@ -149,14 +149,14 @@ class ProductService @Autowired constructor() {
 
         return Product(
             id,
-            data["name"] as String,
+            data["name"] as? String ?: "",
             price,
-            data["email"] as String,
-            data["firstname"] as String,
-            data["lastname"] as String,
-            data["username"] as String,
-            data["desc"] as String,
-            data["imageUrl"] as String,
+            data["email"] as? String ?: "",
+            data["firstname"] as? String ?: "",
+            data["lastname"] as? String ?: "",
+            data["username"] as? String ?: "",
+            data["desc"] as? String ?: "",
+            data["imageUrl"] as? String ?: "",
             category
         )
     }
