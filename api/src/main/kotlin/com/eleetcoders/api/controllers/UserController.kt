@@ -25,8 +25,10 @@ class UserController constructor(
     }
 
     @GetMapping("/get-listings")
-    fun getListings(@RequestBody user: User) : String {
-        return userService.listProducts(user)
+    fun getListings(request : HttpServletRequest) : String {
+        val session = request.getSession(false)
+        val email: String = session.getAttribute("email") as String
+        return userService.listProducts(email)
     }
 
     @PostMapping("/create-listing")

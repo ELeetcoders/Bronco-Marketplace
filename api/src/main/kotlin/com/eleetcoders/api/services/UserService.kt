@@ -68,7 +68,7 @@ class UserService {
         return Gson().toJson(Status.SUCCESS)
     }
 
-    fun listProducts(user: User) : String {
+    fun listProducts(email: String) : String {  /* Lists products without categorizing objects */
         val db = FirestoreClient.getFirestore()
         val collectionRef = db.listCollections()
         val productList = ArrayList<Map<String, Any>>()
@@ -79,7 +79,7 @@ class UserService {
             for (document in collection.listDocuments())  {
                 val data = document.get().get().data
 
-                if (data?.get("email") == user.email) {
+                if (data?.get("email") == email) {
                     productList.add(data)
                 }
             }

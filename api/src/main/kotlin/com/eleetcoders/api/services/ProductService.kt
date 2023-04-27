@@ -61,7 +61,7 @@ class ProductService @Autowired constructor() {
         return Gson().toJson(data)
     }
 
-    fun searchByEmail(email: String) : String {
+    fun searchByEmail(email: String) : String { /* Lists products, categorizing the products */
         val db = FirestoreClient.getFirestore()
         val collections = db.listCollections()
         val data = HashMap<String, ArrayList<Product>>()
