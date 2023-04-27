@@ -3,9 +3,10 @@ package com.eleetcoders.api.services
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
+import com.google.api.core.ApiFuture
+import com.google.cloud.firestore.DocumentSnapshot
 import com.google.firebase.cloud.FirestoreClient
 import com.google.gson.Gson
-import org.springframework.web.bind.annotation.RequestBody
 
 
 class UserService {
@@ -87,7 +88,7 @@ class UserService {
         return Gson().toJson(productList)
     }
 
-    fun createListing(email: String, firstname: String, lastname: String, username: String, name: String, desc: String, price: Double,
+    fun createListing(email: String, name: String, desc: String, price: Double,
                       category: Product.Category, imageURL: String) : Boolean {
 
         if (price < 0 ||
@@ -95,7 +96,16 @@ class UserService {
             return false
 
         val db = FirestoreClient.getFirestore()
-        val data = mutableMapOf<String, Any>(
+        val userInfoRef = db.collection("user").document(email)
+        val future: ApiFuture<DocumentSnapshot> = userInfoRef.get()
+        val document = future.get()
+
+
+        val firstname: String? = document.getString("firstname")
+        val lastname: String? = document.getString("lastname")
+        val username: String? = document.getString("username")
+
+        val data = mutableMapOf<String, Any?>(
             "name" to name,
             "desc" to desc,
             "price" to price,
