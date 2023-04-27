@@ -39,7 +39,7 @@ class LoginController constructor(val loginServices: LoginServices){
 
         response.status = HttpStatus.OK.value()
         response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400")
-        return Gson().toJson(Status.SUCCESS)
+        return loginServices.verify(email)
     }
 
     @PostMapping("sign-up")
@@ -56,6 +56,7 @@ class LoginController constructor(val loginServices: LoginServices){
         val session = request.getSession(true)
         session.maxInactiveInterval = 86400; //1 day session
         session.setAttribute("email", user.email)
+        val email: String = session.getAttribute("email") as String
 
         // Create a new JSESSIONID cookie with a custom maxAge value so it persists when user closes browser
 //        val cookie = Cookie("JSESSIONID", session.id)
@@ -64,7 +65,7 @@ class LoginController constructor(val loginServices: LoginServices){
 
         response.status = HttpStatus.OK.value()
         response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
-        return Gson().toJson(Status.SUCCESS)
+        return loginServices.verify(email)
     }
 
     @PostMapping("sign-out")
