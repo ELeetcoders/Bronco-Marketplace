@@ -18,8 +18,8 @@ class LoginController constructor(val loginServices: LoginServices){
     @GetMapping("/verify")
     fun verify(request : HttpServletRequest, response: HttpServletResponse) : String {
         val session = request.getSession(false)
-        val email: String? = session?.getAttribute("email") as? String
-        return Gson().toJson(email)
+        val email: String = session.getAttribute("email") as String
+        return loginServices.verify(email)
     }
 
     @PostMapping("/sign-in")

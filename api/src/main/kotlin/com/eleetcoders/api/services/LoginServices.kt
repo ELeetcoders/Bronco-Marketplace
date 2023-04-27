@@ -27,6 +27,29 @@ class LoginServices @Autowired constructor(
         const val TRANSFORMATION : String = "AES/ECB/PKCS5Padding"
     }
 
+    fun verify(email: String) : String {
+        val db = FirestoreClient.getFirestore()
+        val userRef = db.collection("user").document(email)
+
+        // Retrieve the document and extract the firstname and lastname fields
+        val snapshot = userRef.get().get()
+        val firstname = snapshot.getString("firstname")
+        val lastname = snapshot.getString("lastname")
+        val username = snapshot.getString("username")
+        val profilePic = snapshot.getString("profilePic")
+
+        // Do something with the firstname and lastname fields (e.g. add them to a map)
+        val userData = mutableMapOf<String, Any>()
+        if (firstname != null) userData["firstname"] = firstname
+        if (lastname != null) userData["lastname"] = lastname
+        if (username != null) userData["username"] = username
+        if (profilePic != null) userData["profilePic"] = profilePic
+        userData["email"] = email
+
+        // Convert the map to a JSON string and return it
+        return Gson().toJson(userData)
+    }
+
     fun checkCredentials(email : String, password : String) : String {
         val firebase = FirestoreClient.getFirestore()
 
