@@ -70,17 +70,13 @@ class UserService {
 
     fun listProducts(email: String) : String {  /* Lists products without categorizing objects */
         val db = FirestoreClient.getFirestore()
-        val collectionRef = db.listCollections()
         val productList = ArrayList<Map<String, Any>>()
 
-        for (collection in collectionRef) {
-            if (collection.id == "user" || collection.id == "chats")
-                continue
-            for (document in collection.listDocuments())  {
-                val data = document.get().get().data
-
-                if (data?.get("email") == email) {
-                    val productData = HashMap(data) // create a new HashMap with the existing data
+        db.listCollections().forEach { collection ->
+            val collectionName = collection.id
+            if (collectionName != "user" && collectionName != "chats") {
+                collection.whereEqualTo("email", email).get().get().forEach { document ->
+                    val productData = HashMap(document.data) // create a new HashMap with the existing data
                     productData["id"] = document.id // add a new key-value pair for the document id
                     productList.add(productData)
                 }
