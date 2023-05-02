@@ -29,7 +29,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          envkey_GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           file_name: .env
           fail_on_empty: false
 
