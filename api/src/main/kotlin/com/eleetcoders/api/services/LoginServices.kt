@@ -2,19 +2,15 @@ package com.eleetcoders.api.services
 
 import com.eleetcoders.api.models.Status
 import com.eleetcoders.api.models.User
-import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.QueryDocumentSnapshot
 import com.google.common.io.Resources.getResource
 import com.google.firebase.cloud.FirestoreClient
-import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import org.jetbrains.annotations.NotNull
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
-import java.io.File
-import java.io.FileReader
-import java.nio.file.Files
-import java.nio.file.Path
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -67,6 +63,14 @@ class LoginServices @Autowired constructor(
         if (target == null)
             return Gson().toJson(Status.FAIL)
 
+        var verified = target.get("verified") as Boolean
+        if (verified == null) {
+            verified = true
+        }
+
+        if (verified == false) {
+            return Gson().toJson(Status.FAIL)
+        }
 
         if (decrypt(target.get("password") as String) == decrypt(password)) {
             return Gson().toJson(Status.SUCCESS)
@@ -75,6 +79,8 @@ class LoginServices @Autowired constructor(
         return Gson().toJson(Status.FAIL)
     }
 
+    @Autowired
+    private lateinit var mailSender: JavaMailSender
     fun createNewUser(user : User): String {
         val db = FirestoreClient.getFirestore()
         val userRef = db.collection("user").document(user.email)
@@ -84,10 +90,24 @@ class LoginServices @Autowired constructor(
         if (userRef.get().get().exists() || !userService.isValidEmail(user.email))
             return Gson().toJson(Status.FAIL)
 
+        val verificationId = UUID.randomUUID().toString()
+
         val data = mapOf<String, Any>("username" to user.userName, "password" to user.password,
-            "firstname" to user.firstname, "lastname" to user.lastname)
+            "firstname" to user.firstname, "lastname" to user.lastname, "verified" to false,
+            "verificationId" to verificationId)
         userRef.create(data)
-        return Gson().toJson(Status.SUCCESS)
+
+        val message = SimpleMailMessage()
+        val toEmail = user.email
+        val body = "Hi," + user.firstname + ", navigate to the verification link to verify email: " + "http://broncomarketplace.com/verify?id=" + verificationId
+        val subject = "Verify CPP email address"
+        message.setFrom("fromemail@gmail.com")
+        message.setTo(toEmail)
+        message.setText(body)
+        message.setSubject(subject)
+        mailSender.send(message)
+
+        return Gson().toJson(Status.VERIFY)
     }
 
     fun encrypt(input: String) : String {

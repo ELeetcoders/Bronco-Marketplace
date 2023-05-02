@@ -1,40 +1,42 @@
 package com.eleetcoders.api.controllers
 
-import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import jakarta.servlet.http.HttpSession
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import org.apache.tomcat.util.codec.binary.Base64
-import org.jsoup.Jsoup
+import io.github.cdimascio.dotenv.dotenv
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.JavaMailSenderImpl
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.SecretKeySpec
 
 @RestController
 @RequestMapping("/")
 class BaseController {
+
+//    @Value("\${spring.mail.password}")
+//    private var GMAIL_PASSWORD = "wadrjddcbzsxmwed"
+
     @GetMapping
     fun base(): String = "Pong!"
 
-    @PostMapping("/test")
-    fun test(req: HttpServletRequest): String {
-        val cookies: Array<Cookie> = req.cookies ?: emptyArray()
-        cookies.forEach { cookie ->
-            println("${cookie.name}=${cookie.value}")
-        }
-        return "Hello World"
+    @GetMapping("/test")
+    fun test(): String {
+        val dotenv = dotenv()
+        return dotenv["GMAIL_PASSWORD"]
     }
 
-    @GetMapping("/test2")
-    fun test2(req: HttpServletRequest): String {
-        val cookies: Array<Cookie> = req.cookies ?: emptyArray()
-        cookies.forEach { cookie ->
-            println("${cookie.name}=${cookie.value}")
-        }
-        return "test2"
+    @Autowired
+    private lateinit var mailSender: JavaMailSender
+    @GetMapping("/email")
+    fun email() {
+        val message = SimpleMailMessage()
+        val toEmail = "mmt@cpp.edu"
+        val body = "Hi this is the verification email"
+        val subject = "Verify email"
+        message.setFrom("fromemail@gmail.com")
+        message.setTo(toEmail)
+        message.setText(body)
+        message.setSubject(subject)
+        mailSender.send(message)
+        println("Mail Send...")
     }
 }

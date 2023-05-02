@@ -31,6 +31,8 @@ dependencies {
 	implementation("com.google.code.gson:gson:2.10.1")
 
 	implementation("com.google.firebase:firebase-admin:9.1.1")
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+	implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 }
 

@@ -21,7 +21,7 @@ class SessionAuth {
     fun SessionFilterRegistrationBean(): FilterRegistrationBean<SessionFilter>? {
         val registrationBean: FilterRegistrationBean<SessionFilter> = FilterRegistrationBean()
         registrationBean.setFilter(SessionFilter())
-        registrationBean.addUrlPatterns("/login/verify", "/test", "/test2", "/user/create-listing")
+        registrationBean.addUrlPatterns("/login/verify", "/user/create-listing")
         return registrationBean
     }
     @Bean
