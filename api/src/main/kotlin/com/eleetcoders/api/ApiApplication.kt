@@ -11,9 +11,9 @@ class ApiApplication {
 	companion object {
 		@JvmStatic
 		fun main(args: Array<String>) {
-//			val dotenv = dotenv()
-//			val gmailPassword = dotenv["GMAIL_PASSWORD"]
-//			System.setProperty("spring.mail.password", gmailPassword)
+			val dotenv = dotenv()
+			val gmailPassword = dotenv["GMAIL_PASSWORD"]
+			System.setProperty("spring.mail.password", gmailPassword)
 			runApplication<ApiApplication>(*args)
 		}
 	}
