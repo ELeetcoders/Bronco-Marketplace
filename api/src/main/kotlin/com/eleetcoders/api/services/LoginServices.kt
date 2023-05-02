@@ -63,7 +63,7 @@ class LoginServices @Autowired constructor(
         if (target == null)
             return Gson().toJson(Status.FAIL)
 
-        var verified = target.get("verified") as Boolean
+        var verified = target.get("verified")
         if (verified == null) {
             verified = true
         }
