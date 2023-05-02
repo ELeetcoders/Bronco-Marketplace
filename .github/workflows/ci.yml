@@ -25,6 +25,13 @@ jobs:
         env:
           FILE_NAME: 'api/src/main/resources/keyBytes.txt'
           FILE_DATA: ${{ secrets.ENCRYPTION_KEY }}
+      
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          file_name: .env
+          fail_on_empty: false
 
       - uses: actions/setup-java@v3
         with:
