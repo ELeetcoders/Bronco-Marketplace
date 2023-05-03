@@ -69,7 +69,7 @@ class LoginServices @Autowired constructor(
         }
 
         if (verified == false) {
-            return Gson().toJson(Status.FAIL)
+            return Gson().toJson(Status.VERIFY)
         }
 
         if (decrypt(target.get("password") as String) == decrypt(password)) {

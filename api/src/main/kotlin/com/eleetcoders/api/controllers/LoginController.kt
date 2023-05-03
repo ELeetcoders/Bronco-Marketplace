@@ -30,8 +30,11 @@ class LoginController constructor(val loginServices: LoginServices){
             Gson().fromJson(loginCredentials["password"], String::class.java)
         )
 
-        if(loginServices.checkCredentials(email, password) == Gson().toJson(Status.FAIL))
+        val status = loginServices.checkCredentials(email, password)
+        if(status == Gson().toJson(Status.FAIL))
             return Gson().toJson(Status.FAIL)
+        else if (status == Gson().toJson(Status.VERIFY))
+            return Gson().toJson(Status.VERIFY)
 
         val session = request.getSession(true)
         session.maxInactiveInterval = 86400; //1 day session
