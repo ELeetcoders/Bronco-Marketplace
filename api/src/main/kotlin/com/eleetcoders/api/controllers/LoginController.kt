@@ -30,6 +30,7 @@ class LoginController constructor(val loginServices: LoginServices){
             return Gson().toJson(Status.FAIL)
         }
         val email = session.getAttribute(verificationId) as String
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=43200")
         return loginServices.verify(email)
     }
 
