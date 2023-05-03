@@ -22,6 +22,17 @@ class LoginController constructor(val loginServices: LoginServices){
         return loginServices.verify(email)
     }
 
+    @PostMapping("/verified-email")
+    fun verifiedEmail(request : HttpServletRequest, response: HttpServletResponse) : String {
+        val session = request.getSession(false)
+        val verificationId: String? = session.getAttribute("verificationId") as? String
+        if (verificationId == null) {
+            return Gson().toJson(Status.FAIL)
+        }
+        val email = session.getAttribute(verificationId) as String
+        return loginServices.verify(email)
+    }
+
     @PostMapping("/sign-in")
     fun loginPage(@RequestBody loginCredentials: Map<String, String>,
                   request : HttpServletRequest, response: HttpServletResponse) : String {
@@ -53,7 +64,7 @@ class LoginController constructor(val loginServices: LoginServices){
         map["password"] = loginServices.encrypt(map["password"] as String)
         val user = User(map)
 
-        if(loginServices.createNewUser(user) == Gson().toJson(Status.FAIL))
+        if(loginServices.createNewUser(user, request) == Gson().toJson(Status.FAIL))
             return Gson().toJson(Status.FAIL)
 
         /*
