@@ -30,6 +30,7 @@ class LoginController constructor(val loginServices: LoginServices){
             return Gson().toJson(Status.FAIL)
         }
         val email = session.getAttribute(verificationId) as String
+        session.setAttribute("email", email)
         response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=43200")
         return loginServices.verify(email)
     }
@@ -65,7 +66,7 @@ class LoginController constructor(val loginServices: LoginServices){
         map["password"] = loginServices.encrypt(map["password"] as String)
         val user = User(map)
 
-        if(loginServices.createNewUser(user, request) == Gson().toJson(Status.FAIL))
+        if(loginServices.createNewUser(user, request, response) == Gson().toJson(Status.FAIL))
             return Gson().toJson(Status.FAIL)
 
         /*
@@ -81,7 +82,7 @@ class LoginController constructor(val loginServices: LoginServices){
 //        response.addCookie(cookie)
 
         response.status = HttpStatus.OK.value()
-        //response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
+//        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
         return loginServices.verify(user.email)
     }
 

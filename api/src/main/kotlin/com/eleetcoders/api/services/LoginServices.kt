@@ -7,6 +7,7 @@ import com.google.common.io.Resources.getResource
 import com.google.firebase.cloud.FirestoreClient
 import com.google.gson.Gson
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
@@ -82,7 +83,7 @@ class LoginServices @Autowired constructor(
 
     @Autowired
     private lateinit var mailSender: JavaMailSender
-    fun createNewUser(user : User, request: HttpServletRequest): String {
+    fun createNewUser(user : User, request: HttpServletRequest, response: HttpServletResponse): String {
         val db = FirestoreClient.getFirestore()
         val userRef = db.collection("user").document(user.email)
 
@@ -109,10 +110,10 @@ class LoginServices @Autowired constructor(
         mailSender.send(message)
 
         val session = request.getSession(true)
-        session.maxInactiveInterval = 86400; //1 day to verify email
+        //session.maxInactiveInterval = 86400; //1 day to verify email
         session.setAttribute("verificationId", verificationId)
         session.setAttribute(verificationId, user.email)
-
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
         return Gson().toJson(Status.VERIFY)
     }
 
