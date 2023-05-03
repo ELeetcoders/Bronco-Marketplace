@@ -113,7 +113,7 @@ class LoginServices @Autowired constructor(
         //session.maxInactiveInterval = 86400; //1 day to verify email
         session.setAttribute("verificationId", verificationId)
         session.setAttribute(verificationId, user.email)
-        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
+//        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
         return Gson().toJson(Status.VERIFY)
     }
 

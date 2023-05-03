@@ -81,8 +81,9 @@ class LoginController constructor(val loginServices: LoginServices){
 //        cookie.maxAge = 86400 // Set cookie maxAge to 1 day
 //        response.addCookie(cookie)
 
+        val session = request.getSession(true)
         response.status = HttpStatus.OK.value()
-//        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
+        response.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; Domain=.broncomarketplace.com; SameSite=Lax; Max-Age=86400");
         return loginServices.verify(user.email)
     }
 
