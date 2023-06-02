@@ -3,11 +3,12 @@ package com.eleetcoders.api.controllers
 import com.eleetcoders.api.models.Product
 import com.eleetcoders.api.services.ProductService
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.http.MediaType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/product", produces= arrayOf("application/json"))
 class ProductController @Autowired constructor(
     private val productService: ProductService
 ){

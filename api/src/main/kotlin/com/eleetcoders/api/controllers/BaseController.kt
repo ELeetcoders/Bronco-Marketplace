@@ -1,28 +1,51 @@
 package com.eleetcoders.api.controllers
 
+import com.google.gson.Gson
 import io.github.cdimascio.dotenv.dotenv
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
-import org.springframework.mail.javamail.JavaMailSenderImpl
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/", produces= arrayOf("application/json"))
 class BaseController {
 
-//    @Value("\${spring.mail.password}")
-//    private var GMAIL_PASSWORD = "wadrjddcbzsxmwed"
-
     @GetMapping
-    fun base(): String = "Pong!"
+    fun base(): String ="Pong!"
 
-    @GetMapping("/test")
-    fun test(): String {
-        val dotenv = dotenv()
-        return dotenv["GMAIL_PASSWORD"]
-    }
+//    @GetMapping("/testing")
+//    fun testing(): Any {
+//        val responseMap: MutableMap<String, Any> = HashMap()
+//        responseMap["name"] = "John Doe"
+//        responseMap["age"] = 30
+//        responseMap["email"] = "johndoe@example.com"
+//        return responseMap
+//    }
+//
+//    @GetMapping("/testing2")
+//    fun testing2(): Any {
+//        val responseMap: MutableMap<String, Any> = HashMap()
+//        responseMap["name"] = "John Doe"
+//        responseMap["age"] = 30
+//        responseMap["email"] = "johndoe@example.com"
+//        return Gson().toJson(responseMap)
+//    }
+//
+//    @GetMapping("/testing3")
+//    fun testing3(): Any {
+//        val responseMap: MutableMap<String, Any> = HashMap()
+//        responseMap["name"] = "John Doe"
+//        responseMap["age"] = 30
+//        responseMap["email"] = "johndoe@example.com"
+//        return Gson().toJson(Gson().toJson(responseMap))
+//    }
+//
+//    @GetMapping("/test")
+//    fun test(): String {
+//        val dotenv = dotenv()
+//        return dotenv["GMAIL_PASSWORD"]
+//    }
 
     @Autowired
     private lateinit var mailSender: JavaMailSender

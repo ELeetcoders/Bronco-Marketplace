@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.assertj.core.api.Assertions.assertThat
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 
 @SpringBootTest
+//@AutoConfigureMockMvc
 class ApiApplicationTests {
 
 	@Test
@@ -18,9 +20,10 @@ class ApiApplicationTests {
 
 		// Assert that the collections variable is not null.
 		assertNotNull(collections)
+		println(collections)
 
 		// Assert that the collections variable contains the expected collections.
-		val expectedCollections = listOf("user", "book", "category", "chat", "messages")
+		val expectedCollections = listOf("TECH", "BOOK", "SERVICES", "chats", "user")
 		assertThat(collections.map { it.id }).containsAll(expectedCollections)
 	}
 

@@ -18,7 +18,6 @@ class ProductService @Autowired constructor() {
         val collections = db.listCollections()
 
         val products = HashMap<String, MutableList<Product>>()
-
         for (collection in collections) {
             val collectionName = collection.id
 
@@ -31,6 +30,7 @@ class ProductService @Autowired constructor() {
 
             val temp = ArrayList<Product>()
             for (document in collection.get().get().documents) {
+                println(document)
                 temp.add(dataToProduct(document.data, document.id, Product.ignoreCase(collectionName)))
             }
             products[collectionName] = temp
@@ -141,6 +141,7 @@ class ProductService @Autowired constructor() {
 
     private fun dataToProduct(data: MutableMap<String, Any>, id: String, category: Product.Category) : Product{
 
+        // firestore treats Number as Double, so 20 -> 20.0 when converted to java type
         val price = try {
             data["price"] as Double
         } catch (e : Exception) {
