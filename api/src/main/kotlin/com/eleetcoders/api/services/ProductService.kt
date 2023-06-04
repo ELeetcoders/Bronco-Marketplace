@@ -30,7 +30,6 @@ class ProductService @Autowired constructor() {
 
             val temp = ArrayList<Product>()
             for (document in collection.get().get().documents) {
-                println(document)
                 temp.add(dataToProduct(document.data, document.id, Product.ignoreCase(collectionName)))
             }
             products[collectionName] = temp

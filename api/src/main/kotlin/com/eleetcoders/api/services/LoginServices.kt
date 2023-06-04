@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
+import java.io.File
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -134,7 +135,15 @@ class LoginServices @Autowired constructor(
     }
 
     fun decrypt(input: String) : String {
-        val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+
+        // for development
+        var keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+        // for docker prod
+        if (keyBytes == null) {
+            val file = File("serviceAccountKey.json")
+            keyBytes = file.readBytes()
+        }
+
         val cipher = Cipher.getInstance(TRANSFORMATION)
 
         val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {

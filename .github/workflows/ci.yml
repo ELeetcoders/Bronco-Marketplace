@@ -38,7 +38,23 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - run: cd api && chmod +x gradlew && ./gradlew test && ./gradlew bootJar
+      - run: cd api && chmod +x gradlew && ./gradlew test
+      - run: |
+        mv src/main/resources/serviceAccountKey.json ../serviceAccountKey.json
+        mv src/main/resources/keyBytes.txt ../keyBytes.txt
+      - run: ./gradlew bootJar
+
+      name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: michael8pho/broncomarketplace-app:latest
       
       - name: Copy bin to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -57,7 +73,17 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          source: .env
+          source: keyBytes.txt
+          target: /home/ec2-user/api/build/libs/
+
+      - name: Copy serviceKey to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          source: serviceAccountKey.json
           target: /home/ec2-user/api/build/libs/
       
       - name: Restart server
@@ -68,10 +94,14 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            sudo apt install docker.io
+            sudo systemctl start docker
+            docker version
+            docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
+            docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
-            killall java
-            nohup java -jar api-0.0.1-SNAPSHOT.jar > log.txt &
-            cat log.txt
+            docker run -d -p 8080:8080 -v /path/to/serviceAccountKey.json:/app/serviceAccountKey.json --name marketplace michael8pho/broncomarketplace-app
+            
             sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
             sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
