@@ -45,9 +45,9 @@ jobs:
       - name: Move sensitive files
         run: |
           ls
-          cd api/src/main/resources
-          mv src/main/resources/serviceAccountKey.json ../serviceAccountKey.json
-          mv src/main/resources/keyBytes.txt ../keyBytes.txt
+          mv api/src/main/resources/serviceAccountKey.json serviceAccountKey.json
+          mv api/src/main/resources/keyBytes.txt keyBytes.txt
+          ls
 
       - name: Build jar file
         run: cd api && chmod +x gradlew && ./gradlew bootJar
