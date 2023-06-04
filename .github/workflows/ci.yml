@@ -38,19 +38,25 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - run: cd api && chmod +x gradlew && ./gradlew test
-      - run: |
-        mv src/main/resources/serviceAccountKey.json ../serviceAccountKey.json
-        mv src/main/resources/keyBytes.txt ../keyBytes.txt
-      - run: ./gradlew bootJar
 
-      name: Login to Docker Hub
+      - name: Run tests
+        run: cd api && chmod +x gradlew && ./gradlew test
+
+      - name: Move sensitive files
+        run: |
+          mv src/main/resources/serviceAccountKey.json ../serviceAccountKey.json
+          mv src/main/resources/keyBytes.txt ../keyBytes.txt
+
+      - name: Build jar file
+        run: cd api && chmod +x gradlew && ./gradlew bootJar
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
+    
+      - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
