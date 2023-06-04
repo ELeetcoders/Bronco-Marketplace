@@ -45,6 +45,7 @@ jobs:
       - name: Move sensitive files
         run: |
           ls
+          cd api/src/main/resources
           mv src/main/resources/serviceAccountKey.json ../serviceAccountKey.json
           mv src/main/resources/keyBytes.txt ../keyBytes.txt
 
