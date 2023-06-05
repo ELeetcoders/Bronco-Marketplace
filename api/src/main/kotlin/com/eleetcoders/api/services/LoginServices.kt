@@ -121,11 +121,14 @@ class LoginServices @Autowired constructor(
     fun encrypt(input: String) : String {
 
         // for development
-        var keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+        var keyBytes = getResource("keyBytes.txt")
         // for docker prod
         if (keyBytes == null) {
-            val file = File("serviceAccountKey.json")
+            val file = File("keyBytes.txt")
             keyBytes = file.readBytes()
+        }
+        else {
+            keyBytes.readText().toByteArray()
         }
 
         val cipher = Cipher.getInstance(TRANSFORMATION)
@@ -145,11 +148,14 @@ class LoginServices @Autowired constructor(
     fun decrypt(input: String) : String {
 
         // for development
-        var keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+        var keyBytes = getResource("keyBytes.txt")
         // for docker prod
         if (keyBytes == null) {
-            val file = File("serviceAccountKey.json")
+            val file = File("keyBytes.txt")
             keyBytes = file.readBytes()
+        }
+        else {
+            keyBytes.readText().toByteArray()
         }
 
         val cipher = Cipher.getInstance(TRANSFORMATION)
