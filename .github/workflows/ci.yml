@@ -101,10 +101,12 @@ jobs:
             sudo yum install -y docker
             sudo service docker start
             docker version
+            sudo docker ps
             sudo docker stop marketplace && docker rm marketplace
             sudo docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
+            sudo docker ps
             sudo docker run -d -p 8080:8080 \
               -v /home/ec2-user/api/build/libs:/app/ \
               --name marketplace michael8pho/broncomarketplace-app
