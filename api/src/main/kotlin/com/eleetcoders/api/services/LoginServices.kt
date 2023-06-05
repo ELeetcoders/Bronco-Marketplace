@@ -119,7 +119,15 @@ class LoginServices @Autowired constructor(
     }
 
     fun encrypt(input: String) : String {
-        val keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+
+        // for development
+        var keyBytes = getResource("keyBytes.txt").readText().toByteArray()
+        // for docker prod
+        if (keyBytes == null) {
+            val file = File("serviceAccountKey.json")
+            keyBytes = file.readBytes()
+        }
+
         val cipher = Cipher.getInstance(TRANSFORMATION)
 
         val secretKey : SecretKeySpec = if (keyBytes.size <= 16) {
