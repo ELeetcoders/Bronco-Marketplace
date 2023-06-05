@@ -56,7 +56,8 @@ jobs:
         run: |
           docker build -t broncomarketplace:latest .
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push broncomarketplace:latest
+          docker tag broncomarketplace:latest michael8pho/broncomarketplace-app:latest
+          docker push michael8pho/broncomarketplace-app:latest
       
       - name: Copy bin to EC2
         uses: appleboy/scp-action@v0.1.4
