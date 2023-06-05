@@ -101,8 +101,8 @@ jobs:
             sudo yum install -y docker
             sudo service docker start
             docker version
-            docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
-            docker pull michael8pho/broncomarketplace-app
+            sudo docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
+            sudo docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
             sudo docker run -d -p 8080:8080 \
