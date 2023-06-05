@@ -101,14 +101,14 @@ jobs:
             sudo yum install -y docker
             sudo service docker start
             docker version
-            docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
-            docker pull michael8pho/broncomarketplace-app
+            sudo docker ps
+            sudo docker stop marketplace && sudo docker rm marketplace
+            sudo docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
-            docker run -d -p 8080:8080 \
-              -v serviceAccountKey.json:/app/ \
-              -v .env:/app/ \
-              -v .keyBytes:/app/ \
+            sudo docker ps
+            sudo docker run -d -p 8080:8080 \
+              -v /home/ec2-user/api/build/libs:/app/ \
               --name marketplace michael8pho/broncomarketplace-app
             
             sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
