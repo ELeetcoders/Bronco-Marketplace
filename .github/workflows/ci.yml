@@ -102,7 +102,7 @@ jobs:
             sudo service docker start
             docker version
             sudo docker ps
-            sudo docker stop $(docker ps -aq) && sudo docker rm $(docker ps -aq)
+            sudo docker stop marketplace && sudo docker rm marketplace
             sudo docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
