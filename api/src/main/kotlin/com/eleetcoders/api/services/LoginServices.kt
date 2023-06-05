@@ -140,7 +140,7 @@ class LoginServices @Autowired constructor(
         var keyBytes = getResource("keyBytes.txt").readText().toByteArray()
         // for docker prod
         if (keyBytes == null) {
-            val file = File("/secrets/serviceAccountKey.json")
+            val file = File("serviceAccountKey.json")
             keyBytes = file.readBytes()
         }
 

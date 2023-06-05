@@ -107,9 +107,11 @@ jobs:
             cd /home/ec2-user/api/build/libs/
             ls
             sudo docker ps
-            sudo docker run -d -p 8080:8080 \
-              -v /home/ec2-user/api/build/libs:/app/ \
-              --name marketplace michael8pho/broncomarketplace-app
-            
+            docker create --name marketplace -p 8080:8080 michael8pho/broncomarketplace-app
+            docker cp serviceAccountKey.json marketplace:/app/
+            docker cp keyBytes.txt marketplace:/app/
+            docker cp .env marketplace:/app/  
+            docker start marketplace
+
             sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
             sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
