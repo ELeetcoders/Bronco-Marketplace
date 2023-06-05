@@ -124,7 +124,12 @@ class LoginServices @Autowired constructor(
         var keyBytes: ByteArray;
 
         // for development
-        var keyBytes_resource: URL = getResource("keyBytes.txt")
+        var keyBytes_resource: URL? = try {
+            getResource("keyBytes.txt")
+        } catch (e: Exception) {
+            null
+        }
+
         // for docker prod
         if (keyBytes_resource == null) {
             var keyBytes_file = File("keyBytes.txt")
@@ -153,7 +158,12 @@ class LoginServices @Autowired constructor(
         var keyBytes: ByteArray;
 
         // for development
-        var keyBytes_resource: URL = getResource("keyBytes.txt")
+        var keyBytes_resource: URL? = try {
+            getResource("keyBytes.txt")
+        } catch (e: Exception) {
+            null
+        }
+
         // for docker prod
         if (keyBytes_resource == null) {
             var keyBytes_file = File("keyBytes.txt")
