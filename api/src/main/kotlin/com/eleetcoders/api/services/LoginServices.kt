@@ -14,6 +14,7 @@ import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 import java.io.File
+import java.net.URL
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -120,15 +121,17 @@ class LoginServices @Autowired constructor(
 
     fun encrypt(input: String) : String {
 
+        var keyBytes: ByteArray;
+
         // for development
-        var keyBytes = getResource("keyBytes.txt")
+        var keyBytes_resource: URL = getResource("keyBytes.txt")
         // for docker prod
-        if (keyBytes == null) {
-            val file = File("keyBytes.txt")
-            keyBytes = file.readBytes()
+        if (keyBytes_resource == null) {
+            var keyBytes_file = File("keyBytes.txt")
+            keyBytes = keyBytes_file.readBytes()
         }
         else {
-            keyBytes.readText().toByteArray()
+            keyBytes = keyBytes_resource.readText().toByteArray()
         }
 
         val cipher = Cipher.getInstance(TRANSFORMATION)
@@ -147,15 +150,17 @@ class LoginServices @Autowired constructor(
 
     fun decrypt(input: String) : String {
 
+        var keyBytes: ByteArray;
+
         // for development
-        var keyBytes = getResource("keyBytes.txt")
+        var keyBytes_resource: URL = getResource("keyBytes.txt")
         // for docker prod
-        if (keyBytes == null) {
-            val file = File("keyBytes.txt")
-            keyBytes = file.readBytes()
+        if (keyBytes_resource == null) {
+            var keyBytes_file = File("keyBytes.txt")
+            keyBytes = keyBytes_file.readBytes()
         }
         else {
-            keyBytes.readText().toByteArray()
+            keyBytes = keyBytes_resource.readText().toByteArray()
         }
 
         val cipher = Cipher.getInstance(TRANSFORMATION)
