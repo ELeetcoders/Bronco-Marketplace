@@ -28,7 +28,7 @@ class FirebaseInit {
                     var serviceAccount: InputStream? = FirebaseInit::class.java.getResourceAsStream("/serviceAccountKey.json")
                     // for docker prod
                     if (serviceAccount == null) {
-                        val file = File("serviceAccountKey.json")
+                        val file = File("/secrets/serviceAccountKey.json")
                         serviceAccount = FileInputStream(file)
                     }
 
