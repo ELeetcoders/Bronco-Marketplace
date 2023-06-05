@@ -105,7 +105,7 @@ jobs:
             docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
-            docker run -d -p 8080:8080 \
+            sudo docker run -d -p 8080:8080 \
               -v serviceAccountKey.json:/app/ \
               -v .env:/app/ \
               -v .keyBytes:/app/ \
