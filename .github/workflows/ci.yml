@@ -101,7 +101,7 @@ jobs:
             sudo yum install -y docker
             sudo service docker start
             docker version
-            sudo docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
+            sudo docker stop marketplace && docker rm marketplace
             sudo docker pull michael8pho/broncomarketplace-app
             cd /home/ec2-user/api/build/libs/
             ls
