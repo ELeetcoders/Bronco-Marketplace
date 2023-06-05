@@ -50,7 +50,7 @@ jobs:
           ls
 
       - name: Build jar file
-        run: cd api && chmod +x gradlew && ./gradlew bootJar && ls
+        run: cd api && chmod +x gradlew && ./gradlew bootJar && ls && cd build/libs/ && ls
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
